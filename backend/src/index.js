@@ -1,5 +1,12 @@
+require('dotenv').config()
+
 const app = require('./app')
 
-app.listen(4000,()=>{
-    console.log("Servidor on port 4000")
-})
+require('./database')
+
+async function main() {
+    await app.listen(app.get('port'));
+    console.log("Servidor on port 4000");
+}
+
+main();
