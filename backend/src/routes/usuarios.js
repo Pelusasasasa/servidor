@@ -1,18 +1,15 @@
 const {Router} = require('express')
-const { getUsuarios, getUsuario } = require('../controllers/usuarios.controller')
+const { getUsuarios, getUsuario,crearUsuario,deleteUsuario,actualizarUsuario } = require('../controllers/usuarios.controller')
 const router = Router() 
 
 router.route('/')
     .get(getUsuarios)
-    .post((req,res)=>{
-        console.log(req.body)
-        res.json({mesagge:"Usuario Traido"})
-    })
+    .post(crearUsuario)
 
 router.route('/:id')
      .get(getUsuario)
-//     .post()
-//     .delete()
+     .put(actualizarUsuario)
+     .delete(deleteUsuario)
 
 
 module.exports = router;
