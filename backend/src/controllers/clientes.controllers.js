@@ -3,12 +3,42 @@ const clienteCTRL = {}
 const Clientes = require('../models/cliente')
 
 clienteCTRL.traerClientes = async(req,res)=>{
-    const {nombre} = req.params
-    const re = new RegExp(`^${nombre}`)
+    const {identificador} = req.params
+    const re = new RegExp(`^${identificador}`)
     let clientes
-    console.log(re)
-    clientes = await Clientes.find({cliente: {$regex: re,$options: 'i'}}).sort({nombre:1}).limit(20)
+    clientes = await Clientes.find({cliente: {$regex: re,$options: 'i'}}).sort({identificador:1}).limit(500)
     res.send(clientes)
 }
 
-module.exports = clienteCTRL
+
+clienteCTRL.crearCliente = async(req,res)=>{
+    const nuevoCliente = new Clientes(req.body)
+    console.log(req.body)
+    await nuevoCliente.save()
+}
+
+clienteCTRL.tamanioArreglo = async(req,res)=>{
+    const {inicial} = req.params
+    const clientes = await Clientes.find({cliente: new RegExp('^' + inicial,'m')},{_id:1})
+    const tamanio = clientes.length
+    ultimoCliente = clientes[tamanio-1]._id
+    const numero = parseInt(ultimoCliente.split(`${inicial}`)[1])
+    res.send(`${numero}`)
+}
+clienteCTRL.traerCliente = async(req,res)=>{
+    const {id} = req.params
+    const cliente = await Clientes.find({_id:id})
+    res.json(cliente[0])
+}
+
+clienteCTRL.modificarCliente = async(req,res)=>{
+    const {identificador} = req.params;
+    const modificado = await Clientes.findByIdAndUpdate({_id:identificador},req.body)
+    res.json(modificado)
+}
+
+clienteCTRL.eliminarCliente = async(req,res)=>{
+    const {identificador} = req.params;
+    await Clientes.findByIdAndDelete({_id:identificador})
+}
+module.exports = clienteCTRL    
