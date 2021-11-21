@@ -13,5 +13,6 @@ app.use(express.json())
 //routes
 app.use('/api/usuarios',require('./routes/usuarios'))
 app.use('/api/clientes',require('./routes/clientes'))
+app.use('/api/pedidos',require('./routes/pedidos'))
 
 module.exports = app

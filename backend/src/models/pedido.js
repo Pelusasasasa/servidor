@@ -7,15 +7,15 @@ const Pedido = new Schema({
     },
     codigo:{
         type: String,
-        required: true
+        required: false
     },
     producto:{
         type: String,
-        required: true
+        required: false
     },
     cantidad:{
         type: Number,
-        required: true
+        required: false
     },
     cliente:{
         type: String,
@@ -27,11 +27,11 @@ const Pedido = new Schema({
     },
     vendedor: {
         type: String,
-        required: true
+        required: false
     },
     stock: {
         type: Number,
-        required: true
+        required: false
     },
     estadoPedido: {
         type: String,

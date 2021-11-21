@@ -6,10 +6,9 @@ clienteCTRL.traerClientes = async(req,res)=>{
     const {identificador} = req.params
     const re = new RegExp(`^${identificador}`)
     let clientes
-    clientes = await Clientes.find({cliente: {$regex: re,$options: 'i'}}).sort({identificador:1}).limit(500)
+    clientes = await Clientes.find({cliente: {$regex: re,$options: 'i'}}).sort({identificador:1}).limit(20)
     res.send(clientes)
 }
-
 
 clienteCTRL.crearCliente = async(req,res)=>{
     const nuevoCliente = new Clientes(req.body)
@@ -20,9 +19,9 @@ clienteCTRL.crearCliente = async(req,res)=>{
 clienteCTRL.tamanioArreglo = async(req,res)=>{
     const {inicial} = req.params
     const clientes = await Clientes.find({cliente: new RegExp('^' + inicial,'m')},{_id:1})
-    const tamanio = clientes.length
-    ultimoCliente = clientes[tamanio-1]._id
-    const numero = parseInt(ultimoCliente.split(`${inicial}`)[1])
+    const tamanio = clientes.length;
+    clientes[tamanio-1] ? (ultimoCliente = clientes[tamanio-1]._id) : (ultimoCliente = inicial);
+    const numero = parseInt(ultimoCliente.split(`${inicial}`)[1]);
     res.send(`${numero}`)
 }
 clienteCTRL.traerCliente = async(req,res)=>{
