@@ -12,7 +12,6 @@ clienteCTRL.traerClientes = async(req,res)=>{
 
 clienteCTRL.crearCliente = async(req,res)=>{
     const nuevoCliente = new Clientes(req.body)
-    console.log(req.body)
     await nuevoCliente.save()
 }
 
@@ -20,9 +19,14 @@ clienteCTRL.tamanioArreglo = async(req,res)=>{
     const {inicial} = req.params
     const clientes = await Clientes.find({cliente: new RegExp('^' + inicial,'m')},{_id:1})
     const tamanio = clientes.length;
-    clientes[tamanio-1] ? (ultimoCliente = clientes[tamanio-1]._id) : (ultimoCliente = inicial);
-    const numero = parseInt(ultimoCliente.split(`${inicial}`)[1]);
-    res.send(`${numero}`)
+    clientes[tamanio-1] ? (ultimoCliente = clientes[tamanio-1]._id) : (ultimoCliente = inicial+"000");
+    let numero = (parseInt(ultimoCliente.split(`${inicial}`)[1]) + 1).toString();
+    console.log(numero)
+    numero = numero.padStart(3,"0")
+    let retornar = inicial + numero;
+    console.log(numero)
+    console.log(retornar)
+    res.send(retornar)
 }
 clienteCTRL.traerCliente = async(req,res)=>{
     const {id} = req.params

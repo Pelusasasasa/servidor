@@ -9,8 +9,8 @@ usuariosCTRL.getUsuarios = async(req,res)=>{
 }
 usuariosCTRL.crearUsuario = async(req,res)=>{
     const nuevoUsuario = new Usuarios(req.body)
+    await nuevoUsuario.save()
     res.json("Usuario Guardado")
-   await nuevoUsuario.save()
 }
 
 
