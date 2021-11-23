@@ -13,37 +13,35 @@ productosCTRL.traerProductos = async(req,res)=>{
     res.send(productos)
 }
 
-productosCTRL.getroducto = async(req,res)=>{
+productosCTRL.getproducto = async(req,res)=>{
     const {id} = req.params
-    console.log(id)
-    let producto = await Productos.find({ _id: id })
-    res.send(producto[0])
+    let producto
+    if(id === "stockNegativo"){
+        productos = await Productos.find({stock:{$lt: 0}})
+        res.send(productos)
+    }else{
+        producto = await Productos.find({ _id: id })
+        res.send(producto[0])
+    }
+
 }
 
 productosCTRL.crearProducto = async(req,res)=>{
     const productonuevo = new Productos(req.body);
     await productonuevo.save();
+    res.send("Producto Cargado")
 }
 
 productosCTRL.modificarProducto = async(req,res)=>{
     const {id} = req.params;
     const productoModificado = await Productos.findByIdAndUpdate({_id:id},req.body);
+    res.send("Producto Modificado")
 }
 
 productosCTRL.borrarProducto = async(req,res)=>{
     const {id} = req.params;
     await Productos.findByIdAndDelete({_id:id})
-}
-
-productosCTRL.stockNegativo = async(req,res)=>{
-    const {tipoBusqueda} = req.params;
-    console.log(tipoBusqueda)
-    let productos 
-    if (tipoBusqueda === "stockNegativo") {
-        productos = await Productos.find({stock:{$lt: 0}})
-    }
-    console.log(productos)
-    res.send(productos)
-}
+    res.send("Producto Borrado")
+}   
 
 module.exports = productosCTRL;
