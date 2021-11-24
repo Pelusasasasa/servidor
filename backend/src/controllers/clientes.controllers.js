@@ -13,6 +13,7 @@ clienteCTRL.traerClientes = async(req,res)=>{
 clienteCTRL.crearCliente = async(req,res)=>{
     const nuevoCliente = new Clientes(req.body)
     await nuevoCliente.save()
+    res.send(`Cliente ${nuevoCliente.cliente} Registrado`);
 }
 
 clienteCTRL.tamanioArreglo = async(req,res)=>{
@@ -43,5 +44,6 @@ clienteCTRL.modificarCliente = async(req,res)=>{
 clienteCTRL.eliminarCliente = async(req,res)=>{
     const {identificador} = req.params;
     await Clientes.findByIdAndDelete({_id:identificador})
+    res.send(`Cliente ${identificador} Eliminado`)
 }
 module.exports = clienteCTRL    

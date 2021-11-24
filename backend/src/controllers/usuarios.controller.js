@@ -13,8 +13,7 @@ usuariosCTRL.crearUsuario = async(req,res)=>{
     res.json("Usuario Guardado")
 }
 
-
-usuariosCTRL.getUsuario =async  (req,res)=>{
+usuariosCTRL.getUsuario =async (req,res)=>{
     const {id} = req.params
     res.send(await Usuarios.findById(id))
 }

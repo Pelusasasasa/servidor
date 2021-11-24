@@ -10,6 +10,7 @@ productosCTRL.traerProductos = async(req,res)=>{
     }else{
         productos = await Productos.find().sort({descripcion: 1}).limit(50);
     }
+    console.log(productos)
     res.send(productos)
 }
 
@@ -21,9 +22,9 @@ productosCTRL.getproducto = async(req,res)=>{
         res.send(productos)
     }else{
         producto = await Productos.find({ _id: id })
+
         res.send(producto[0])
     }
-
 }
 
 productosCTRL.crearProducto = async(req,res)=>{

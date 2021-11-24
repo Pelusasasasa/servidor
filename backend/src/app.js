@@ -15,4 +15,5 @@ app.use('/api/usuarios',require('./routes/usuarios'))
 app.use('/api/clientes',require('./routes/clientes'))
 app.use('/api/pedidos',require('./routes/pedidos'))
 app.use('/api/productos',require('./routes/productos'))
+app.use('/api/tipoVenta',require('./routes/tipoVenta'))
 module.exports = app
