@@ -15,7 +15,6 @@ pedidosCTRL.crearPedido = async(req,res)=>{
 
 pedidosCTRL.modificarPedido = async(req,res)=>{
     const {id} = req.params;
-    console.log(req.body)
     await Pedidos.findByIdAndUpdate({_id:id},req.body)
 }
 

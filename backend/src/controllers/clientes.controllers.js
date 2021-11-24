@@ -29,7 +29,6 @@ clienteCTRL.tamanioArreglo = async(req,res)=>{
 clienteCTRL.traerCliente = async(req,res)=>{
     const {id} = req.params
     const cliente = await Clientes.find({_id:id})
-    console.log("object")
     res.json(cliente[0])
 }
 

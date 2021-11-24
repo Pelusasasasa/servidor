@@ -10,7 +10,6 @@ productosCTRL.traerProductos = async(req,res)=>{
     }else{
         productos = await Productos.find().sort({descripcion: 1}).limit(50);
     }
-    console.log(productos)
     res.send(productos)
 }
 
@@ -22,7 +21,6 @@ productosCTRL.getproducto = async(req,res)=>{
         res.send(productos)
     }else{
         producto = await Productos.find({ _id: id })
-
         res.send(producto[0])
     }
 }
@@ -43,6 +41,12 @@ productosCTRL.borrarProducto = async(req,res)=>{
     const {id} = req.params;
     await Productos.findByIdAndDelete({_id:id})
     res.send("Producto Borrado")
-}   
+}
+
+productosCTRL.traerProductosPorRango = async(req,res)=>{
+    const {desde,hasta} = req.params;
+    const productos = await Productos.find({$and: [{_id:{$gte: desde}},{_id:{$lte: hasta}}]});
+    res.send(productos);
+}
 
 module.exports = productosCTRL;
