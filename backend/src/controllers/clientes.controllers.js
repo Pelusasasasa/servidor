@@ -22,16 +22,14 @@ clienteCTRL.tamanioArreglo = async(req,res)=>{
     const tamanio = clientes.length;
     clientes[tamanio-1] ? (ultimoCliente = clientes[tamanio-1]._id) : (ultimoCliente = inicial+"000");
     let numero = (parseInt(ultimoCliente.split(`${inicial}`)[1]) + 1).toString();
-    console.log(numero)
     numero = numero.padStart(3,"0")
     let retornar = inicial + numero;
-    console.log(numero)
-    console.log(retornar)
     res.send(retornar)
 }
 clienteCTRL.traerCliente = async(req,res)=>{
     const {id} = req.params
     const cliente = await Clientes.find({_id:id})
+    console.log("object")
     res.json(cliente[0])
 }
 
