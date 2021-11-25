@@ -33,9 +33,9 @@ const Venta = new Schema({
         required: false
     },
     tipo_pago: String,
-    cod_doc: Number,
-    dnicuit: String,
-    condIva: String,
+    cod_doc: Number, //Blanco
+    dnicuit: String, //Blanco
+    condIva: String, //Blanco
     pagado: Boolean,
     abonado: {
         type:String,

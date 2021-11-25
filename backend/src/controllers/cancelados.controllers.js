@@ -17,7 +17,6 @@ canceladosCTRL.CargarCancelado = async(req,res)=>{
 canceladosCTRL.traerTamanio = async(req,res)=>{
     const cancelado = await Cancelados.find()
     const tamanio =  cancelado.length
-    console.log(tamanio)
     res.send(`${tamanio}`)
 }
 
