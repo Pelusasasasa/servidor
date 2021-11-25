@@ -29,6 +29,7 @@ clienteCTRL.tamanioArreglo = async(req,res)=>{
 clienteCTRL.traerCliente = async(req,res)=>{
     const {id} = req.params
     const cliente = await Clientes.find({_id:id})
+    console.log(cliente[0])
     res.json(cliente[0])
 }
 
@@ -42,5 +43,11 @@ clienteCTRL.eliminarCliente = async(req,res)=>{
     const {identificador} = req.params;
     await Clientes.findByIdAndDelete({_id:identificador})
     res.send(`Cliente ${identificador} Eliminado`)
+}
+
+clienteCTRL.traerClientePorCuit = async(req,res)=>{
+    const {cuit} = req.params;
+    const cliente = await Clientes.find({cuit:cuit})
+    res.send(cliente[0])
 }
 module.exports = clienteCTRL    

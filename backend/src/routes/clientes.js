@@ -1,7 +1,7 @@
 const {Router} = require("express")
 const router = Router()
 
-const {traerClientes,crearCliente,tamanioArreglo,traerCliente,modificarCliente,eliminarCliente} = require('../controllers/clientes.controllers')
+const {traerClientes,crearCliente,tamanioArreglo,traerCliente,modificarCliente,eliminarCliente,traerClientePorCuit} = require('../controllers/clientes.controllers')
 
 
 router.route('/')
@@ -14,6 +14,9 @@ router.route('/:identificador')
 
 router.route('/id/:id')
     .get(traerCliente)
+
+router.route('/cuit/:cuit')
+    .get(traerClientePorCuit)
 
 
     //se usa para saber el tamaño del codigo de cliente
