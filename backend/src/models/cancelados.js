@@ -9,7 +9,10 @@ const cancelado = new Schema({
         type: Date,
         default: Date.now
     },
-    cliente: String,
+    cliente: {
+        type:String,
+        default:""
+    },
     productos: {
         type: [],
         dafult: []
