@@ -8,7 +8,6 @@ tipoVentaCTLR.traerVentas = async(req,res)=>{
     res.send(tipoVenta[0])
 }
 
-
 tipoVentaCTLR.crearTipoVenta = async(req,res)=>{
     const tipoventa = new TipoVenta(req.body);
     await tipoventa.save()

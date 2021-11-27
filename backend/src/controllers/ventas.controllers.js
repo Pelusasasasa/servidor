@@ -32,4 +32,9 @@ ventasCTRL.entreFechasConId = async(req,res) => {
     res.send(ventaARetornar)
 }
 
+ventasCTRL.traerTamanio = async(req,res) => {
+    const ventas = await Ventas.find();
+    res.send(`${ventas.length   }`)
+}
+
 module.exports = ventasCTRL;

@@ -1,9 +1,10 @@
 const {Router} = require("express");
 const router = Router();
 
-const {cargarVenta,traerVentas,modificarVentas,entreFechas,entreFechasConId} = require("../controllers/ventas.controllers")
+const {cargarVenta,traerVentas,modificarVentas,entreFechas,entreFechasConId,traerTamanio} = require("../controllers/ventas.controllers")
 
 router.route('/')
+    .get(traerTamanio)
     .post(cargarVenta)
 
 router.route('/:id')
