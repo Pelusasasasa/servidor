@@ -10,7 +10,9 @@ ventasCTRL.cargarVenta = async(req,res)=>{
 
 ventasCTRL.traerVentas = async(req,res)=>{
     const {id} = req.params;
+    console.log(id)
     const venta = await Ventas.find({_id:id})
+    console.log(venta)
     res.send(venta)
 }
 

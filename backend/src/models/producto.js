@@ -52,6 +52,10 @@ const Producto = new Schema({
     observacion: {
         type: String,
         default: ""
+    },
+    unidad: {
+        type: String,
+        default: "U"
     }
 
 })
