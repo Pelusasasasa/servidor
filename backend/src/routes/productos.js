@@ -14,7 +14,7 @@ router.route('/:id')
     .put(modificarProducto)
     .delete(borrarProducto)
 
-router.route('/:productosEntreRangos/desde/hasta')
+router.route('/:productosEntreRangos/:desde/:hasta')
     .get(traerProductosPorRango)
     
 module.exports = router
