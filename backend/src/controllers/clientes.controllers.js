@@ -49,4 +49,9 @@ clienteCTRL.traerClientePorCuit = async(req,res)=>{
     const cliente = await Clientes.find({cuit:cuit})
     res.send(cliente[0])
 }
+
+clienteCTRL.traerClientesConSaldo = async(req,res)=>{
+    const clientes = await Clientes.find({$or:[{saldo: {$ne: "0"}},{saldo_p:{$ne: "0"}}]},{_id:1,cliente:1,direccion:1,cond_iva:1,telefono:1,saldo:1,saldo_p:1})
+    res.send(clientes)
+}
 module.exports = clienteCTRL    
