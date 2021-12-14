@@ -10,9 +10,7 @@ ventasCTRL.cargarVenta = async(req,res)=>{
 
 ventasCTRL.traerVentas = async(req,res)=>{
     const {id} = req.params;
-    console.log(id)
     const venta = await Ventas.find({_id:id})
-    console.log(venta)
     res.send(venta)
 }
 
@@ -37,6 +35,12 @@ ventasCTRL.entreFechasConId = async(req,res) => {
 ventasCTRL.traerTamanio = async(req,res) => {
     const ventas = await Ventas.find();
     res.send(`${ventas.length   }`)
+}
+
+ventasCTRL.eliminarVenta = async(req,res)=>{
+    const {id} = req.params;
+    await Ventas.findByIdAndDelete({_id:id});
+    res.send("Venta Eliminada");
 }
 
 module.exports = ventasCTRL;
