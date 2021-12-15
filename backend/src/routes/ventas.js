@@ -1,7 +1,7 @@
 const {Router} = require("express");
 const router = Router();
 
-const {cargarVenta,traerVentas,modificarVentas,entreFechas,entreFechasConId,traerTamanio,eliminarVenta} = require("../controllers/ventas.controllers")
+const {cargarVenta,traerVentas,modificarVentas,entreFechas,entreFechasConId,traerTamanio,eliminarVenta  } = require("../controllers/ventas.controllers")
 
 router.route('/')
     .get(traerTamanio)
