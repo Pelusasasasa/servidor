@@ -19,4 +19,5 @@ app.use('/api/tipoVenta',require('./routes/tipoVenta'))
 app.use('/api/movProductos',require('./routes/movProductos'))
 app.use('/api/cancelados',require('./routes/cancelados'))
 app.use('/api/ventas',require('./routes/ventas'))
+app.use('/api/fiscal',require('./routes/fiscal'))
 module.exports = app
