@@ -5,7 +5,6 @@ const path = "C://Users//Electro Avenida//Desktop//Fiscal//"
 
 
 itemCTRL.informacionItem = async(req,res)=>{
-    console.log(req.body)
     const {fieldDescriptors,datosAGuardar} = req.body
     if (fs.existsSync(`${path}Item.dbf`)) {
         let dbf = await DBFFile.open(`${path}Item.dbf`);
@@ -15,6 +14,5 @@ itemCTRL.informacionItem = async(req,res)=>{
         await dbf.appendRecords(datosAGuardar);
     }    
 }
-
 
 module.exports = itemCTRL

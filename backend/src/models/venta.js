@@ -3,8 +3,8 @@ const {model,Schema} = require("mongoose")
 
 const Venta = new Schema({
     _id:{
-        type: String,
-        required:true
+        type: Number,
+        required: true
     },
     fecha:{
         type: Date,
