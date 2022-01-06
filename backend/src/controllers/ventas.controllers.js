@@ -5,6 +5,7 @@ const Ventas = require('../models/venta');
 ventasCTRL.cargarVenta = async(req,res)=>{
     const venta = new Ventas(req.body);
     venta.save()
+    console.log("Venta Guardada")
     res.send(venta)
 }
 
@@ -18,7 +19,7 @@ ventasCTRL.modificarVentas = async(req,res) =>{
     const {id} = req.params;
     const abonado = req.body.abonado
     const pagado = req.body.pagado
-    await Ventas.findByIdAndUpdate({nro_comp:id},req.body)
+    await Ventas.findByIdAndUpdate({_id:id},req.body)
     res.send("Venta Modificada")
 }
 ventasCTRL.entreFechas = async(req,res) => {

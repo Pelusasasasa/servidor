@@ -10,7 +10,7 @@ usuariosCTRL.getUsuarios = async(req,res)=>{
 usuariosCTRL.crearUsuario = async(req,res)=>{
     const nuevoUsuario = new Usuarios(req.body)
     await nuevoUsuario.save()
-    res.json("Usuario Guardado")
+    res.json(`Usuario ${req.body.nombre} Creado`)
 }
 
 usuariosCTRL.getUsuario =async (req,res)=>{
@@ -21,8 +21,8 @@ usuariosCTRL.getUsuario =async (req,res)=>{
 usuariosCTRL.actualizarUsuario = async(req,res)=>{
     const {id} = req.params
     await Usuarios.findOneAndUpdate({_id:id},req.body)
-    console.log(req.params)
-    res.send("Usuario Modificado")
+    console.log(req.body.nombre)
+    res.send(`Usuario ${req.body.nombre} Modificado`)
 }
 
 usuariosCTRL.deleteUsuario = async (req,res)=>{
