@@ -36,6 +36,12 @@ ventasCTRL.entreFechasConId = async(req,res) => {
     res.send(ventaARetornar)
 }
 
+ventasCTRL.entreFechasConCliente = async(req,res) => {
+    const {idCliente,desde,hasta} = req.params
+    const ventaARetornar =  await Ventas.find({$and:[{cliente:idCliente},{fecha:{$gte: new Date(desde)}},{fecha:{$lte: new Date(hasta)}}]})
+    res.send(ventaARetornar)
+}
+
 ventasCTRL.traerTamanio = async(req,res) => {
     const ventas = await Ventas.find();
     res.send(`${ventas.length }`)

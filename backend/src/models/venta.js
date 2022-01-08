@@ -50,7 +50,8 @@ const Venta = new Schema({
         type: Number,
         required: true
     },
-    vendedor: String
+    vendedor: String,
+    empresa: String
 })
 
 module.exports = model('Venta',Venta)

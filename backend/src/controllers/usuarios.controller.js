@@ -21,7 +21,7 @@ usuariosCTRL.getUsuario =async (req,res)=>{
 usuariosCTRL.actualizarUsuario = async(req,res)=>{
     const {id} = req.params
     await Usuarios.findOneAndUpdate({_id:id},req.body)
-    console.log(req.body.nombre)
+    console.log(req.body)
     res.send(`Usuario ${req.body.nombre} Modificado`)
 }
 
