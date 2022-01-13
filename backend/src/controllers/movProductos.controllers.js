@@ -10,6 +10,7 @@ movProductosCTRL.traerMovProducto = async(req,res)=>{
 movProductosCTRL.cargarMovimientoProducto = async(req,res)=>{
     const movimiento = new movProducto(req.body)
     await movimiento.save()
+    console.log(`Movimiento ${req.body.descripcion} Cargado`)
     res.send("movimiento guardado")
 }
 

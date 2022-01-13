@@ -5,7 +5,7 @@ const Ventas = require('../models/venta');
 ventasCTRL.cargarVenta = async(req,res)=>{
     const venta = new Ventas(req.body);
     venta.save()
-    console.log("Venta Guardada")
+    console.log(`Venta ${req.body.nro_comp} guardada`)
     res.send(venta)
 }
 
@@ -20,13 +20,13 @@ ventasCTRL.modificarVentas = async(req,res) =>{
     const abonado = req.body.abonado
     const pagado = req.body.pagado
     await Ventas.findByIdAndUpdate({_id:id},req.body)
+    console.log(`Venta ${req.body.nro_comp} Guardadd`)
     res.send("Venta Modificada")
 }
 ventasCTRL.entreFechas = async(req,res) => {
     const {desde,hasta} = req.params;
     const ventas = await Ventas.find({$and:[{fecha:{$gte: new Date(desde)}},{fecha:{$lte: new Date(hasta)}}]})
-    console.log(new Date(desde)),
-    console.log(new Date(hasta)),
+
     console.log(ventas)
     res.send(ventas)
 }
@@ -44,12 +44,22 @@ ventasCTRL.entreFechasConCliente = async(req,res) => {
 
 ventasCTRL.traerTamanio = async(req,res) => {
     const ventas = await Ventas.find();
-    res.send(`${ventas.length }`)
+    const tamanio = ventas.length;
+    console.log(tamanio)
+    let ultimaVenta;
+    if (tamanio !== 0) {
+        ultimaVenta = ventas[tamanio-1]._id 
+    }else{
+        ultimaVenta = 0;
+    }
+    res.send(`${ultimaVenta }`)
 }
 
 ventasCTRL.eliminarVenta = async(req,res)=>{
     const {id} = req.params;
-    const a = await Ventas.findByIdAndDelete({nro_comp:id}); 
+    console.log(req.params)
+    const a = await Ventas.findOneAndDelete({nro_comp:id}); 
+    console.log(`Venta ${id} Eliminada`);
     res.send("Venta Eliminada");
 }
 

@@ -32,18 +32,21 @@ productosCTRL.getproducto = async(req,res)=>{
 productosCTRL.crearProducto = async(req,res)=>{
     const productonuevo = new Productos(req.body);
     await productonuevo.save();
+    console.log(`Producto ${req.body.descripcion} Creado`)
     res.send("Producto Cargado")
 }
 
 productosCTRL.modificarProducto = async(req,res)=>{
     const {id} = req.params;
     const productoModificado = await Productos.findByIdAndUpdate({_id:id},req.body);
+    console.log(`Producto ${req.body.descripcion} modificado`)
     res.send("Producto Modificado")
 }
 
 productosCTRL.borrarProducto = async(req,res)=>{
     const {id} = req.params;
     await Productos.findByIdAndDelete({_id:id})
+    console.log(`Producto ${id} borrado`)
     res.send("Producto Borrado")
 }
 

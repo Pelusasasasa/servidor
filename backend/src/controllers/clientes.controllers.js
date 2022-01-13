@@ -1,5 +1,6 @@
 const clienteCTRL = {}
 
+const cliente = require('../models/cliente')
 const Clientes = require('../models/cliente')
 
 clienteCTRL.traerClientes = async(req,res)=>{
@@ -13,6 +14,7 @@ clienteCTRL.traerClientes = async(req,res)=>{
 clienteCTRL.crearCliente = async(req,res)=>{
     const nuevoCliente = new Clientes(req.body)
     await nuevoCliente.save()
+    console.log(`cliente ${req.body.cliente} guardado`)
     res.send(`Cliente ${nuevoCliente.cliente} Registrado`);
 }
 
@@ -35,12 +37,14 @@ clienteCTRL.traerCliente = async(req,res)=>{
 clienteCTRL.modificarCliente = async(req,res)=>{
     const {identificador} = req.params;
     const modificado = await Clientes.findByIdAndUpdate({_id:identificador},req.body)
-    res.json(modificado)
+    console.log(`Cliente ${req.body.cliente} modificado`)
+    res.json("Cliente Modificado")
 }
 
 clienteCTRL.eliminarCliente = async(req,res)=>{
     const {identificador} = req.params;
     await Clientes.findByIdAndDelete({_id:identificador})
+    console.log(`Cliente ${identificador} eliminado`)
     res.send(`Cliente ${identificador} Eliminado`)
 }
 
@@ -51,7 +55,7 @@ clienteCTRL.traerClientePorCuit = async(req,res)=>{
 }
 
 clienteCTRL.traerClientesConSaldo = async(req,res)=>{
-    const clientes = await Clientes.find({$or:[{saldo: {$ne: "0"}},{saldo_p:{$ne: "0"}}]},{_id:1,cliente:1,direccion:1,cond_iva:1,telefono:1,saldo:1,saldo_p:1})
+    const clientes = await Clientes.find({$or:[{saldo: {$ne: "0"}},{saldo_p:{$ne: "0"}}]},{_id:1,cliente:1,direccion:1,cond_iva:1,telefono:1,saldo:1,saldo_p:1,localidad:1})
     res.send(clientes)
 }
 module.exports = clienteCTRL    
