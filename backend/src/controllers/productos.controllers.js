@@ -15,6 +15,7 @@ productosCTRL.traerProductos = async(req,res)=>{
             productos = await Productos.find().sort({descripcion: 1}).limit(50);
     }
     res.send(productos)
+    console.log("a")
 }
 
 productosCTRL.getproducto = async(req,res)=>{
@@ -27,6 +28,7 @@ productosCTRL.getproducto = async(req,res)=>{
         producto = await Productos.find({ _id: id })
         res.send(producto[0])
     }
+
 }
 
 productosCTRL.crearProducto = async(req,res)=>{
@@ -53,7 +55,27 @@ productosCTRL.borrarProducto = async(req,res)=>{
 productosCTRL.traerProductosPorRango = async(req,res)=>{
     const {desde,hasta} = req.params;
     const productos = await Productos.find({$and: [{_id:{$gte: desde}},{_id:{$lte: hasta}}]});
+    console.log("A")
     res.send(productos);
+}
+
+productosCTRL.traerMarcas = async(req,res)=>{
+    const productos = await Productos.find({},{_id:0 , marca:1})
+    let marcas = []
+    productos.filter((ele)=>{
+        if(!marcas.includes(ele.marca)){
+            marcas.push(ele.marca)
+        }
+    })
+    res.send(marcas)
+}
+
+
+productosCTRL.productosPorMarca = async(req,res)=>{
+    const {marca} = req.params;
+    console.log(marca)
+    const productos = await Productos.find({marca:marca});
+    res.send(productos)
 }
 
 module.exports = productosCTRL;
