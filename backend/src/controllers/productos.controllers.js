@@ -4,6 +4,7 @@ const Productos = require("../models/producto");
 
 productosCTRL.traerProductos = async(req,res)=>{
     const {texto,tipoBusqueda} = req.params;
+    console.log(tipoBusqueda);
     if(texto[0] === "*"){
             const contenga = texto.substr(1);
             const re = new RegExp(`${contenga}`)
@@ -15,7 +16,6 @@ productosCTRL.traerProductos = async(req,res)=>{
             productos = await Productos.find().sort({descripcion: 1}).limit(50);
     }
     res.send(productos)
-    console.log("a")
 }
 
 productosCTRL.getproducto = async(req,res)=>{
