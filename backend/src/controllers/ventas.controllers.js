@@ -17,17 +17,13 @@ ventasCTRL.traerVentas = async(req,res)=>{
 
 ventasCTRL.modificarVentas = async(req,res) =>{
     const {id} = req.params;
-    const abonado = req.body.abonado
-    const pagado = req.body.pagado
     await Ventas.findByIdAndUpdate({_id:id},req.body)
-    console.log(`Venta ${req.body.nro_comp} Guardadd`)
+    console.log(`Venta ${req.body.nro_comp} Modificada`)
     res.send("Venta Modificada")
 }
 ventasCTRL.entreFechas = async(req,res) => {
     const {desde,hasta} = req.params;
     const ventas = await Ventas.find({$and:[{fecha:{$gte: new Date(desde)}},{fecha:{$lte: new Date(hasta)}}]})
-
-    console.log(ventas)
     res.send(ventas)
 }
 ventasCTRL.entreFechasConId = async(req,res) => {
@@ -45,7 +41,6 @@ ventasCTRL.entreFechasConCliente = async(req,res) => {
 ventasCTRL.traerTamanio = async(req,res) => {
     const ventas = await Ventas.find();
     const tamanio = ventas.length;
-    console.log(tamanio)
     let ultimaVenta;
     if (tamanio !== 0) {
         ultimaVenta = ventas[tamanio-1]._id 

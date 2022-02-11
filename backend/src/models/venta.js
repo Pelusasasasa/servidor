@@ -10,8 +10,12 @@ const Venta = new Schema({
         type: Date,
         default: Date.now
     },
+    nombreCliente: {
+        type: String,
+        default: "A Consumidor Final"
+    },
     cliente: {
-        type: {},
+        type: String,
         required: true
     },
     cod_comp: {

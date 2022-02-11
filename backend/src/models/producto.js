@@ -34,8 +34,8 @@ const Producto = new Schema({
         default: "0"
     },
     costodolar: {
-        type: String,
-        default: "0"
+        type: Number,
+        default: 0
     },
     impuestos: {
         type: String,
@@ -56,9 +56,10 @@ const Producto = new Schema({
     unidad: {
         type: String,
         default: "U"
-    }
-
+    },
+    imgURL: String
 })
+
 
 
 module.exports = model('Producto', Producto);

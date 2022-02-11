@@ -22,9 +22,8 @@ clienteCTRL.tamanioArreglo = async(req,res)=>{
     const {inicial} = req.params
     const clientes = await Clientes.find({cliente: new RegExp('^' + inicial,'m')},{_id:1})
     const tamanio = clientes.length;
-    clientes[tamanio-1] ? (ultimoCliente = clientes[tamanio-1]._id) : (ultimoCliente = inicial+"000");
-    let numero = (parseInt(ultimoCliente.split(`${inicial}`)[1]) + 1).toString();
-    numero = numero.padStart(3,"0")
+    let numero
+    clientes[tamanio-1] ? (numero = (clientes.length.toFixed(0)).padStart(3,"0")) : (numero = "000");
     let retornar = inicial + numero;
     res.send(retornar)
 }
@@ -55,7 +54,7 @@ clienteCTRL.traerClientePorCuit = async(req,res)=>{
 }
 
 clienteCTRL.traerClientesConSaldo = async(req,res)=>{
-    const clientes = await Clientes.find({$or:[{saldo: {$ne: "0"}},{saldo_p:{$ne: "0"}}]},{_id:1,cliente:1,direccion:1,cond_iva:1,telefono:1,saldo:1,saldo_p:1,localidad:1})
+    const clientes = await Clientes.find({$or:[{saldo: {$ne: "0"}},{saldo_p:{$ne: "0"}}]},{_id:1,cliente:1,direccion:1,cond_iva:1,telefono:1,saldo:1,saldo_p:1,localidad:1,cuit:1})
     res.send(clientes)
 }
 module.exports = clienteCTRL    

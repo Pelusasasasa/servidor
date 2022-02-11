@@ -1,6 +1,7 @@
 const {Router} = require("express");
 const router = Router();
 
+
 const {crearProducto,traerProductos,getproducto,modificarProducto,borrarProducto,productosPorMarca,traerProductosPorRango,stockNegativo,traerMarcas} = require("../controllers/productos.controllers");
 
 router.route('/')
@@ -19,5 +20,6 @@ router.route('/:productosEntreRangos/:desde/:hasta')
 
 router.route('/marcas/:marca')
     .get(productosPorMarca)
+
 
 module.exports = router

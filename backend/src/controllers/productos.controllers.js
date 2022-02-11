@@ -4,7 +4,6 @@ const Productos = require("../models/producto");
 
 productosCTRL.traerProductos = async(req,res)=>{
     const {texto,tipoBusqueda} = req.params;
-    console.log(tipoBusqueda);
     if(texto[0] === "*"){
             const contenga = texto.substr(1);
             const re = new RegExp(`${contenga}`)
@@ -12,8 +11,12 @@ productosCTRL.traerProductos = async(req,res)=>{
     }else if(texto !== "textoVacio"){
                const re = new RegExp(`^${texto}`)
             productos = await Productos.find({[tipoBusqueda]: {$regex: re,$options:'i'}}).sort({descripcion: 1}).limit(50)
+    }else if(tipoBusqueda === "dolar"){
+            productos = await Productos.find()
+            console.log(productos.length)
     }else{
             productos = await Productos.find().sort({descripcion: 1}).limit(50);
+
     }
     res.send(productos)
 }
@@ -40,6 +43,7 @@ productosCTRL.crearProducto = async(req,res)=>{
 
 productosCTRL.modificarProducto = async(req,res)=>{
     const {id} = req.params;
+    console.log(req.body);
     const productoModificado = await Productos.findByIdAndUpdate({_id:id},req.body);
     console.log(`Producto ${req.body.descripcion} modificado`)
     res.send("Producto Modificado")
