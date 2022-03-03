@@ -11,10 +11,6 @@ app.set('port',process.env.PORT || 4000);
 app.use(cors());
 app.use(express.json())
 
-
-
-//app.use('/public',express.static(`${_dirname}/imgs`))
-
 //routes
 app.use('/api/usuarios',require('./routes/usuarios'))
 app.use('/api/clientes',require('./routes/clientes'))
@@ -26,4 +22,7 @@ app.use('/api/cancelados',require('./routes/cancelados'))
 app.use('/api/ventas',require('./routes/ventas'))
 app.use('/api/fiscal',require('./routes/fiscal'))
 app.use('/api/item',require('./routes/item'))
+//Presupuesto
+app.use('/api/presupuesto',require('./routes/presupuesto'))
+
 module.exports = app

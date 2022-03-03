@@ -13,7 +13,6 @@ productosCTRL.traerProductos = async(req,res)=>{
             productos = await Productos.find({[tipoBusqueda]: {$regex: re,$options:'i'}}).sort({descripcion: 1}).limit(50)
     }else if(tipoBusqueda === "dolar"){
             productos = await Productos.find()
-            console.log(productos.length)
     }else{
             productos = await Productos.find().sort({descripcion: 1}).limit(50);
 
@@ -29,6 +28,7 @@ productosCTRL.getproducto = async(req,res)=>{
         res.send(productos)
     }else{
         producto = await Productos.find({ _id: id })
+        // producto[0].imgURL = `../../Imagenes/${id}.jpg`;
         res.send(producto[0])
     }
 
@@ -43,7 +43,6 @@ productosCTRL.crearProducto = async(req,res)=>{
 
 productosCTRL.modificarProducto = async(req,res)=>{
     const {id} = req.params;
-    console.log(req.body);
     const productoModificado = await Productos.findByIdAndUpdate({_id:id},req.body);
     console.log(`Producto ${req.body.descripcion} modificado`)
     res.send("Producto Modificado")
@@ -59,7 +58,6 @@ productosCTRL.borrarProducto = async(req,res)=>{
 productosCTRL.traerProductosPorRango = async(req,res)=>{
     const {desde,hasta} = req.params;
     const productos = await Productos.find({$and: [{_id:{$gte: desde}},{_id:{$lte: hasta}}]});
-    console.log("A")
     res.send(productos);
 }
 

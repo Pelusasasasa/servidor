@@ -55,7 +55,13 @@ const Venta = new Schema({
         required: true
     },
     vendedor: String,
-    empresa: String
+    empresa: String,
+    numeroAsociado: String,
+    gravado21: Number,
+    gravado105: Number,
+    iva21:Number,
+    iva105:Number,
+    cant_iva:Number
 })
 
 module.exports = model('Venta',Venta)

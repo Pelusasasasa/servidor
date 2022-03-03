@@ -51,7 +51,7 @@ const cliente = new Schema({
         type:String,
         default: "0"
     },
-    lim_compra: String,
+    lim_compra: Number,
     cond_fact: String,
     saldo_p: {
         type: String,
