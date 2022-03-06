@@ -20,9 +20,9 @@ app.use('/api/tipoVenta',require('./routes/tipoVenta'))
 app.use('/api/movProductos',require('./routes/movProductos'))
 app.use('/api/cancelados',require('./routes/cancelados'))
 app.use('/api/ventas',require('./routes/ventas'))
-app.use('/api/fiscal',require('./routes/fiscal'))
-app.use('/api/item',require('./routes/item'))
 //Presupuesto
 app.use('/api/presupuesto',require('./routes/presupuesto'))
+//CuentaComp
+app.use('/api/cuentaComp',require('./routes/cueCorrComp'));
 
 module.exports = app

@@ -19,13 +19,19 @@ PresupuestoCTRL.traerPresupuesto = async(req,res)=>{
 PresupuestoCTRL.traerTamanio = async(req,res)=>{
     const presupuesto = await Presupuesto.find()
     const tamanio = presupuesto.length;
-    res.send(`${tamanio}`)
+    let ultimaVenta;
+    if (tamanio !== 0) {
+        ultimaVenta = presupuesto[tamanio-1]._id 
+    }else{
+        ultimaVenta = 0;
+    }
+    res.send(`${ultimaVenta}`)
 }
 
 PresupuestoCTRL.modificarPresupuesto = async(req,res) =>{
     console.log(req.params)
     const {id} = req.params;
-    const presupuesto = await Presupuesto.findByIdAndUpdate({_id:id},req.body);
+    const presupuesto = await Presupuesto.findOneAndUpdate({nro_comp:id},req.body);
     res.send(presupuesto)
 }
 
