@@ -34,15 +34,13 @@ cuentaCompCTRL.cargarCompensada = async(req,res)=>{
 }
 cuentaCompCTRL.modificarCompensada = async(req,res)=>{
     const {id} = req.params;
-    console.log(req.body)
     const compensada = await CuentaComp.findOneAndUpdate({nro_comp:id},req.body);
-    console.log(compensada)
     res.send(`Compensada ${id} Modificada`);
 }
 
 cuentaCompCTRL.borrarCompensada = async(req,res)=>{
     const {id} = req.params;
-    CuentaComp.findOneAndDelete({_id:id});
-    res.send(`Compensada ${id} Eliminada`)
+    await CuentaComp.findOneAndDelete({nro_comp:id});
+    res.send(`Compensada ${id} Eliminada`);
 }
 module.exports = cuentaCompCTRL

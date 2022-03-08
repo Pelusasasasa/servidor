@@ -24,5 +24,7 @@ app.use('/api/ventas',require('./routes/ventas'))
 app.use('/api/presupuesto',require('./routes/presupuesto'))
 //CuentaComp
 app.use('/api/cuentaComp',require('./routes/cueCorrComp'));
+//Cuenta Historica
+app.use('/api/cuentaHisto',require('./routes/cueCorrHist'));
 
 module.exports = app
