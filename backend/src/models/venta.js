@@ -40,11 +40,6 @@ const Venta = new Schema({
     cod_doc: Number, //Blanco
     dnicuit: String, //Blanco
     condIva: String, //Blanco
-    pagado: Boolean,
-    abonado: {
-        type:String,
-        default: "0"
-    },
     observaciones: {
         type: String,
         default: ""
