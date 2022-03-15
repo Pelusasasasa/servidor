@@ -26,5 +26,7 @@ app.use('/api/presupuesto',require('./routes/presupuesto'))
 app.use('/api/cuentaComp',require('./routes/cueCorrComp'));
 //Cuenta Historica
 app.use('/api/cuentaHisto',require('./routes/cueCorrHist'));
+//Imprimir un pdf
+app.use('/api/crearPdf',require('./routes/pdf'));
 
 module.exports = app
