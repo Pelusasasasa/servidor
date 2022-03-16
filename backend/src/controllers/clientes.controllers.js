@@ -24,6 +24,7 @@ clienteCTRL.tamanioArreglo = async(req,res)=>{
     const tamanio = clientes.length;
     let numero
     clientes[tamanio-1] ? (numero = (clientes.length.toFixed(0)).padStart(3,"0")) : (numero = "000");
+    numero = parseFloat(numero) + 1;
     let retornar = inicial + numero;
     res.send(retornar)
 }
