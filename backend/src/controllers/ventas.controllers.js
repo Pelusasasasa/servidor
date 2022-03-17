@@ -52,7 +52,6 @@ ventasCTRL.traerTamanio = async(req,res) => {
 
 ventasCTRL.eliminarVenta = async(req,res)=>{
     const {id} = req.params;
-    console.log(req.params)
     const a = await Ventas.findOneAndDelete({nro_comp:id}); 
     console.log(`Venta ${id} Eliminada`);
     res.send("Venta Eliminada");

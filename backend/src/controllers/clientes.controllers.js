@@ -23,8 +23,8 @@ clienteCTRL.tamanioArreglo = async(req,res)=>{
     const clientes = await Clientes.find({cliente: new RegExp('^' + inicial,'m')},{_id:1})
     const tamanio = clientes.length;
     let numero
-    clientes[tamanio-1] ? (numero = (clientes.length.toFixed(0)).padStart(3,"0")) : (numero = "000");
-    numero = parseFloat(numero) + 1;
+    clientes[tamanio-1] ? (numero = (clientes[tamanio-1]._id)) : (numero = inicial + "000");
+    numero = parseFloat(numero.split(inicial)[1]) + 1;
     let retornar = inicial + numero;
     res.send(retornar)
 }
