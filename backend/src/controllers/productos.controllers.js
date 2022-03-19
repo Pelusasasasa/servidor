@@ -4,15 +4,17 @@ const Productos = require("../models/producto");
 
 productosCTRL.traerProductos = async(req,res)=>{
     const {texto,tipoBusqueda} = req.params;
+    console.log(texto,tipoBusqueda)
     if(texto[0] === "*"){
             const contenga = texto.substr(1);
             const re = new RegExp(`${contenga}`)
             productos = await Productos.find({[tipoBusqueda]: {$regex: re, $options: 'i'}}).sort({descripcion: 1}).limit(50)
     }else if(texto !== "textoVacio"){
+        console.log("b")
                const re = new RegExp(`^${texto}`)
             productos = await Productos.find({[tipoBusqueda]: {$regex: re,$options:'i'}}).sort({descripcion: 1}).limit(50)
     }else if(tipoBusqueda === "dolar"){
-            productos = await Productos.find()
+            productos = await Productos.find({costodolar: {$not:{$eq:0}}});
     }else{
             productos = await Productos.find().sort({descripcion: 1}).limit(50);
 
