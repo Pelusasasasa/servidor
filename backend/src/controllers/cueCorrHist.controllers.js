@@ -39,4 +39,9 @@ cuentaHistoricaCTRL.modificarHistorica = async(req,res)=>{
     const historica = await CuentaHisto.findOneAndUpdate(({nro_comp:id}),req.body);
     res.send(`Historica ${id} Modificada`)
 }
+cuentaHistoricaCTRL.eliminarCuenta = async(req,res)=>{
+    const {id} = req.params;
+    const historica = await CuentaHisto.findOneAndDelete({nro_comp:id});
+    res.send(`Historica ${req.body} Eliminada`);
+}
 module.exports = cuentaHistoricaCTRL

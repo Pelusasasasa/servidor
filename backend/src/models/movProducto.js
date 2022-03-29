@@ -3,8 +3,12 @@ const {model,Schema} = require('mongoose')
 
 const movProducto = new Schema({
     _id: Number,
-    cliente:{
+    codCliente:{
         type: String,
+        default: ""
+    },
+    cliente:{
+        type: String,   
         default: ""
     },
     codProd: {
@@ -38,8 +42,8 @@ const movProducto = new Schema({
         default: 0
     },
     total:{
-        type: String,
-        default: "0"
+        type: Number,
+        default: 0
     },
     pago:String,
     costo:Number,

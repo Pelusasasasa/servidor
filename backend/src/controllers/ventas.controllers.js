@@ -11,8 +11,14 @@ ventasCTRL.cargarVenta = async(req,res)=>{
 
 ventasCTRL.traerVentas = async(req,res)=>{
     const {id} = req.params;
-    const venta = await Ventas.find({nro_comp:id})
+    const venta = await Ventas.find();
     res.send(venta)
+}
+
+ventasCTRL.traerVentaUnica = async(req,res)=>{
+    const {numero,tipo} = req.params;
+    const venta = await Ventas.find({nro_comp:numero,tipo_comp:tipo});
+    res.send(venta[0]);
 }
 
 ventasCTRL.modificarVentas = async(req,res) =>{

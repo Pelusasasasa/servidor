@@ -17,9 +17,6 @@ pdfCTRL.crearPdf = async(req,res)=>{
             ),
         },
     }
-
-    //  const style = require('./style');
-    console.log(cliente)
      const comprobante = verTipoComp(venta.cod_comp);
      const fechaVenta = new Date(venta.fecha)
      let dia = fechaVenta.getDate()
@@ -51,7 +48,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
             `${venta.dnicuit}`,
             `${venta.condIva}`,
             `${cliente.direccion}    ${cliente.localidad}`,
-            `${venta.numeroAsocidado && venta.numeroAsocidado}`,
+            `${venta.numeroAsocidado ? venta.numeroAsocidado : ""}`,
             "------------------------------------------",
             "CANTIDAD/PRECIO UNIT (%IVA)",
             "DESCRIPCION           (%B.I)       IMPORTE",
@@ -60,21 +57,46 @@ pdfCTRL.crearPdf = async(req,res)=>{
         styles: {
             centro: {
                 alignment:"center"
+            },
+            fondo:{
+                alignment:"right"
             }
         }
     }
     venta.productos.forEach(({cantidad,objeto}) => {
-        docDefenition.content.push(`${cantidad}/${objeto.precio_venta}              ${objeto.iva === "N" ? "(21.00)" : "(10.50)"}`);
-        docDefenition.content.push(`${objeto.descripcion.slice(0,30)}    ${(parseFloat(cantidad)*parseFloat(objeto.precio_venta)).toFixed(2)}`);
+        if (venta.condIva === "Inscripto") {
+            docDefenition.content.push(`${cantidad}/${objeto.iva === "N" ? (parseFloat(objeto.precio_venta)/1.21).toFixed(2) : (parseFloat(objeto.precio_venta)/1.105.toFixed(2))}              ${objeto.iva === "N" ? "(21.00)" : "(10.50)"}\n`);
+            docDefenition.content.push(`${objeto.descripcion.slice(0,30)}    ${(parseFloat(cantidad)*parseFloat(objeto.iva === "N" ? parseFloat(objeto.precio_venta)/1.21 : parseFloat(objeto.precio_venta)/1.105)).toFixed(2)}\n`);
+        }else{
+            docDefenition.content.push(`${objeto.descripcion.slice(0,30)}    ${(parseFloat(cantidad)*parseFloat(objeto.iva === "N" ? parseFloat(objeto.precio_venta)/1.21 : parseFloat(objeto.precio_venta)/1.105)).toFixed(2)}\n`);
+            docDefenition.content.push(`${cantidad}/${objeto.precio_venta}              ${objeto.iva === "N" ? "(21.00)" : "(10.50)"}\n`);
+            docDefenition.content.push(`${objeto.descripcion.slice(0,30)}    ${(parseFloat(cantidad)*parseFloat(objeto.precio_venta)).toFixed(2)}\n`);
+        }
     });
-
-    docDefenition.content.push("TOTAL        $" + venta.precioFinal);
+    console.log(venta.condIva === "Inscripto")
+    if (venta.condIva === "Inscripto") {
+        console.log("BOCAAAAAA")
+        if (venta.gravado21 !== 0) {
+            docDefenition.content.push("\n");
+            docDefenition.content.push("NETO SIN IVA              " + venta.gravado21.toFixed(2) + "\n" );
+            docDefenition.content.push("IVA 21.00/                    " +  venta.iva21.toFixed(2) + "\n" );
+            docDefenition.content.push("NETO SIN IVA              0.00" + "\n" );
+        }
+        if (venta.gravado105 !== 0) {
+            docDefenition.content.push("\n");
+            docDefenition.content.push("NETO SIN IVA              " + venta.gravado105.toFixed(2) + "\n");
+            docDefenition.content.push("IVA 10.50/                    " + venta.iva105.toFixed(2) + "\n");
+            docDefenition.content.push("NETO SIN IVA              0.00"  + "\n");
+        }
+    }
+    docDefenition.content.push("\n");       
+    docDefenition.content.push("TOTAL                             $" + venta.precioFinal);
     docDefenition.content.push("Recibimos(mos)\n");
-    docDefenition.content.push(`${venta.tipo_pago === "CD" ? `Contado          ${venta.precioFinal}`  : "Cuenta Corriente"}`);
-    docDefenition.content.push("CAMBIO         $0.00");
+    docDefenition.content.push(`${venta.tipo_pago === "CD" ? `Efectivo                           $${venta.precioFinal}`  : "Cuenta Corriente"}`);
+    docDefenition.content.push("CAMBIO                          $0.00");
     docDefenition.content.push({text:"*MUCHA GRACIAS*",style:"centro"});
     docDefenition.content.push({qr:QR,style:"centro"});
-    docDefenition.content.push("CAE:" + cae + "          Vencimiento CAE:"   + vencimientoCae);
+    docDefenition.content.push({text:"CAE:" + cae + "          Vencimiento CAE:"   + vencimientoCae,style:"centro"});
 
     const printer = new pdfPrinter(fonts);
 

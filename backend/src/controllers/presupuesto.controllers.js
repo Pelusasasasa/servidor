@@ -56,8 +56,7 @@ PresupuestoCTRL.entreFechasConCliente = async(req,res) => {
 
 PresupuestoCTRL.eliminarPresupuesto = async(req,res)=>{
     const {id:nro_comp} = req.params;
-    console.log(req.params)
-    const presupuesto = Presupuesto.findOneAndDelete({nro_comp:nro_comp});
+    await Presupuesto.findOneAndDelete({nro_comp:nro_comp});
     console.log(`Presupuesto ${nro_comp} Eliminada`);
     res.send("a")
 }

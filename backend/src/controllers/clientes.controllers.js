@@ -1,6 +1,5 @@
 const clienteCTRL = {}
 
-const cliente = require('../models/cliente')
 const Clientes = require('../models/cliente')
 
 clienteCTRL.traerClientes = async(req,res)=>{
