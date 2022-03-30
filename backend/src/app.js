@@ -29,6 +29,5 @@ app.use('/api/cuentaHisto',require('./routes/cueCorrHist'));
 //Imprimir un pdf
 app.use('/api/crearPdf',require('./routes/pdf'));
 
-app.use('/api/imprimir',require('./routes/imprimir'));
 
 module.exports = app
