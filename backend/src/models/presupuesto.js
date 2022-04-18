@@ -26,11 +26,6 @@ const Presupuesto = new Schema({
         type:String,
         require:true
     },
-    pagado:Boolean,
-    abonado:{
-        type: Number,
-        default: 0
-    },
     observaciones:{
         type:String,
         default: ""

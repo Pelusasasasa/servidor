@@ -73,9 +73,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
             docDefenition.content.push(`${objeto.descripcion.slice(0,30)}    ${(parseFloat(cantidad)*parseFloat(objeto.precio_venta)).toFixed(2)}\n`);
         }
     });
-    console.log(venta.condIva === "Inscripto")
     if (venta.condIva === "Inscripto") {
-        console.log("BOCAAAAAA")
         if (venta.gravado21 !== 0) {
             docDefenition.content.push("\n");
             docDefenition.content.push("NETO SIN IVA              " + venta.gravado21.toFixed(2) + "\n" );

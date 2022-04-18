@@ -21,7 +21,9 @@ usuariosCTRL.getUsuario =async (req,res)=>{
 
 usuariosCTRL.actualizarUsuario = async(req,res)=>{
     const {id} = req.params
-    await Usuarios.findOneAndUpdate({_id:id},req.body)
+    await Usuarios.findOneAndDelete({_id:id});
+    const nuevoUsuario = new Usuarios(req.body);
+    await nuevoUsuario.save();
     console.log(`Usuario ${req.body.nombre} Modificado`)
     res.send(`Usuario ${req.body.nombre} Modificado`)
 }

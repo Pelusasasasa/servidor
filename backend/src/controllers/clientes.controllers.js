@@ -19,11 +19,13 @@ clienteCTRL.crearCliente = async(req,res)=>{
 
 clienteCTRL.tamanioArreglo = async(req,res)=>{
     const {inicial} = req.params
-    const clientes = await Clientes.find({cliente: new RegExp('^' + inicial,'m')},{_id:1})
+    const clientes = await Clientes.find({_id: new RegExp('^' + inicial,'m')},{_id:1});
     const tamanio = clientes.length;
     let numero
     clientes[tamanio-1] ? (numero = (clientes[tamanio-1]._id)) : (numero = inicial + "000");
-    numero = parseFloat(numero.split(inicial)[1]) + 1;
+    numero = (parseFloat(numero.split(inicial)[1]) + 1).toFixed(0);
+    numero = numero.padStart(3,"000");
+
     let retornar = inicial + numero;
     res.send(retornar)
 }
