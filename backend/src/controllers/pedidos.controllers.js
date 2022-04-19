@@ -25,7 +25,7 @@ pedidosCTRL.eliminarPedido = async(req,res)=>{
     const {id} = req.params
     await Pedidos.findByIdAndDelete({_id:id})
     console.log(`Pedido ${id} Eliminado`)
-    res.sed("eliminado")
+    res.send("eliminado")
 }
 
 module.exports = pedidosCTRL 
