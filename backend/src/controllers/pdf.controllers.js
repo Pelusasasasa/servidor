@@ -1,124 +1,194 @@
 const pdfCTRL = {};
-const pdfPrinter = require('pdfmake');
+
+const pdf = require('html-pdf');
+const qrcode = require('qrcode');
+
+
 const fs = require('fs');
 
+const path = require('path');
+
+let html = fs.readFileSync(__dirname + '/pdf.html','utf8');
+
+
 pdfCTRL.crearPdf = async(req,res)=>{
-    const [venta,cliente,{QR,cae,vencimientoCae}] = req.body;
 
-    const fonts = {
-        Roboto:{
-            normal: Buffer.from(
-                require("pdfmake/build/vfs_fonts.js").pdfMake.vfs["Roboto-Regular.ttf"],
-                "base64"
-            ),
-            bold: Buffer.from(
-                require("pdfmake/build/vfs_fonts.js").pdfMake.vfs["Roboto-Medium.ttf"],
-                "base64"
-            ),
-        },
-    }
-     const comprobante = verTipoComp(venta.cod_comp);
-     const fechaVenta = new Date(venta.fecha)
-     let dia = fechaVenta.getDate()
-     let mes = fechaVenta.getMonth()+1;
-     let horas = fechaVenta.getHours();
-     let minutos = fechaVenta.getMinutes();
-     let segundos = fechaVenta.getSeconds();
-     dia = dia<10 ? `0${dia}` : dia;
-     mes = mes<10 ? `0${mes}` : mes;
-     horas = horas<10 ? `0${horas}` : horas;
-     let anio = fechaVenta.getFullYear()
+    const [venta,cliente,{QR,cae,vencimientoCae,texto}] = req.body;
+    let trs = "";
+    venta.productos.forEach(({objeto,cantidad})=>{
+        trs = trs + `<tr>
+                            <td>${objeto._id}</td>
+                            <td>${objeto.descripcion}</td>
+                            <td class="izquierda">${parseFloat(cantidad).toFixed(2)}</td>
+                            <td class="izquierda">${objeto.unidad}</td>
 
-    let docDefenition = {
+                            ${venta.condIva !== "Inscripto" ? `<td class="izquierda">${parseFloat(objeto.precio_venta).toFixed(2)}</td>` : ""}
 
+                            ${(venta.condIva === "Inscripto" && objeto.iva === "N") ? `<td class="izquierda">${(parseFloat(objeto.precio_venta)/1.21).toFixed(2)}</td>` : ""}
 
-        content:[
-            {text:"*ELECTRO AVENIDA*",style:"centro"},
-            "GIANOVI MARINA ISABEL",
-            "INGRESO BRUTOS: 27165767433",
-            "C.U.I.T Nro: 27165767433",
-            "AV.9 DE JULION-3380 (3228);CHAJARI E.R.",
-            "INICIO DE ACTIVIDADES: 02-03-07",
-            "IVA RESPONSABLE INSCRIPTO",
-            "------------------------------------------",
-            `${comprobante} ${venta.nro_comp}`,
-            `FECHA: ${dia}-${mes}-${anio}    Hora:${horas}:${minutos}:${segundos}`,
-            "------------------------------------------",
-            `${venta.nombreCliente}`,
-            `${venta.dnicuit}`,
-            `${venta.condIva}`,
-            `${cliente.direccion}    ${cliente.localidad}`,
-            `${venta.numeroAsocidado ? venta.numeroAsocidado : ""}`,
-            "------------------------------------------",
-            "CANTIDAD/PRECIO UNIT (%IVA)",
-            "DESCRIPCION           (%B.I)       IMPORTE",
-            "------------------------------------------",
-        ],
-        styles: {
-            centro: {
-                alignment:"center"
-            },
-            fondo:{
-                alignment:"right"
-            }
-        }
-    }
-    venta.productos.forEach(({cantidad,objeto}) => {
-        if (venta.condIva === "Inscripto") {
-            docDefenition.content.push(`${cantidad}/${objeto.iva === "N" ? (parseFloat(objeto.precio_venta)/1.21).toFixed(2) : (parseFloat(objeto.precio_venta)/1.105.toFixed(2))}              ${objeto.iva === "N" ? "(21.00)" : "(10.50)"}\n`);
-            docDefenition.content.push(`${objeto.descripcion.slice(0,30)}    ${(parseFloat(cantidad)*parseFloat(objeto.iva === "N" ? parseFloat(objeto.precio_venta)/1.21 : parseFloat(objeto.precio_venta)/1.105)).toFixed(2)}\n`);
-        }else{
-            docDefenition.content.push(`${objeto.descripcion.slice(0,30)}    ${(parseFloat(cantidad)*parseFloat(objeto.iva === "N" ? parseFloat(objeto.precio_venta)/1.21 : parseFloat(objeto.precio_venta)/1.105)).toFixed(2)}\n`);
-            docDefenition.content.push(`${cantidad}/${objeto.precio_venta}              ${objeto.iva === "N" ? "(21.00)" : "(10.50)"}\n`);
-            docDefenition.content.push(`${objeto.descripcion.slice(0,30)}    ${(parseFloat(cantidad)*parseFloat(objeto.precio_venta)).toFixed(2)}\n`);
-        }
+                            ${(venta.condIva === "Inscripto" && objeto.iva === "R") ? `<td class="izquierda">${(parseFloat(objeto.precio_venta)/1.105).toFixed(2)}</td>` : ""}
+                            
+                            ${venta.condIva !== "Inscripto" ? `<td class="izquierda">${(parseFloat(cantidad)*parseFloat(objeto.precio_venta)).toFixed(2)}</td>` : ""}
+
+                            ${(venta.condIva === "Inscripto" && objeto.iva === "N") ? `<td class="izquierda">${((parseFloat(cantidad)*parseFloat(objeto.precio_venta))/1.21).toFixed(2)}</td>`  : ""}
+
+                            ${(venta.condIva === "Inscripto" && objeto.iva === "R") ? `<td class="izquierda">${((parseFloat(cantidad)*parseFloat(objeto.precio_venta))/1.105).toFixed(2)}</td>`  : ""}
+
+                            ${(venta.condIva === "Inscripto" && objeto.iva === "N") ? `<td class="izquierda">21%</td>`  : "" }
+                            ${(venta.condIva === "Inscripto" && objeto.iva === "R") ? `<td class="izquierda">10.5%</td>`  : "" }
+
+                            ${(venta.condIva === "Inscripto") ? `<td class="izquierda">${(parseFloat(cantidad)*parseFloat(objeto.precio_venta)).toFixed(2)}</td>`  : "" }
+                       </tr>`;
     });
-    if (venta.condIva === "Inscripto") {
-        if (venta.gravado21 !== 0) {
-            docDefenition.content.push("\n");
-            docDefenition.content.push("NETO SIN IVA              " + venta.gravado21.toFixed(2) + "\n" );
-            docDefenition.content.push("IVA 21.00/                    " +  venta.iva21.toFixed(2) + "\n" );
-            docDefenition.content.push("NETO SIN IVA              0.00" + "\n" );
-        }
-        if (venta.gravado105 !== 0) {
-            docDefenition.content.push("\n");
-            docDefenition.content.push("NETO SIN IVA              " + venta.gravado105.toFixed(2) + "\n");
-            docDefenition.content.push("IVA 10.50/                    " + venta.iva105.toFixed(2) + "\n");
-            docDefenition.content.push("NETO SIN IVA              0.00"  + "\n");
-        }
+
+    const date = new Date(venta.fecha);
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    day = day < 10 ? `0${day}` : day;
+    month = month < 10 ? `0${month}` : month;
+    month = month===13 ? 1 : month;
+    
+    const codigoComprobante = verCodigoComp(venta.cod_comp);
+    const tipoCompropobante = verTipoComp(venta.cod_comp);
+    
+    
+    // const qr = (await qrcode.toDataURL(QR)).split('/\r\n|\r|\n/');
+    const a = await generarQR(texto);
+    
+    const img = (await qrcode.toDataURL(a));
+
+
+    //Generamos el qr
+    async function generarQR(texto) {
+        const url = `https://www.afip.gob.ar/fe/qr/?p=${texto}`;
+        return url
     }
-    docDefenition.content.push("\n");       
-    docDefenition.content.push("TOTAL                             $" + venta.precioFinal);
-    docDefenition.content.push("Recibimos(mos)\n");
-    docDefenition.content.push(`${venta.tipo_pago === "CD" ? `Efectivo                           $${venta.precioFinal}`  : "Cuenta Corriente"}`);
-    docDefenition.content.push("CAMBIO                          $0.00");
-    docDefenition.content.push({text:"*MUCHA GRACIAS*",style:"centro"});
-    docDefenition.content.push({qr:QR,style:"centro"});
-    docDefenition.content.push({text:"CAE:" + cae + "          Vencimiento CAE:"   + vencimientoCae,style:"centro"});
 
-    const printer = new pdfPrinter(fonts);
 
-    let pdfDoc = printer.createPdfKitDocument(docDefenition);
-    pdfDoc.pipe(fs.createWriteStream(__dirname + `/pdfs/${venta.nombreCliente}-${venta.nro_comp}.pdf`));
-    pdfDoc.end();
+    html = html.replace('{{image}}', img);
+    html = html.replace('{{cae}}', cae);
+    html = html.replace('{{vencimientoCae}}', vencimientoCae);
+
+
+
+    const config = {
+         "height": "10.5in", "width": "8in",  "format" : "A4", "type": "pdf", "zoomFactor": "0.65",
+         header:{
+             "contents":`
+                <header>
+                    <div class="izquierdo">
+                        <p>GIANOVI MARINA ISABEL</p>
+                        <p>Razon Social:<span> GIANOVI MARINA ISABEL</span></p>
+                        <p>Domicilio Comercial:<span> Av. 9 De Julio 3380 - Chajari, Entre Rios</span></p>
+                        <p>Condicion Frente al IVA:<span> IVA Responsable Inscripto</span></p>
+                    </div>
+                    <div class="tipoFactura">
+                        <div class="div">
+                            <h2>${tipoCompropobante}</h2>
+                            <p>${codigoComprobante}</p>
+                        </div>
+                    </div>
+                    <div class="derecha">
+                        <p>FACTURA</p>
+                        <p>Punto de Venta:<span> 00004</span> Comp.Nro: <span>${venta.nro_comp.split("-")[1]}</span></p>
+                        <p>Fecha de Emision: <span>${day}/${month}/${year}</span></p>
+                        <p>CUIT:<span> 27165767433</span></p>
+                        <p>Ingresos brutos:<span> 27165767433</span></p>
+                        <p>Fecha de Inicio de Actividades:<span>01/09/2007</span></p>
+                    </div>
+                </header>
+                <main class="cliente">
+                        <section>
+                            <p>Apellido y Nombre / Razon Social:<span>${venta.nombreCliente}</span></p>
+                            <p>${venta.dnicuit.length === 8 ? 'DNI' : 'CUIT'}:<span>${venta.dnicuit}</span></p>
+                        </section>
+                        <section>
+                            <p>Condicion frente al IVA:<span>${venta.condIva === "" ? "Consumidor Final" : venta.condIva}</span></p>
+                            <p>Domicilio Comercial:<span></span></p>
+                        </section>
+                        <section class="condicion">
+                            <p>Condicion de Venta:<span>${venta.tipo_pago === "CC" ? "Cuenta Corriente" : "Contado"}</span></p>
+                        </section>
+                </main>
+                <main class="productos">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Codigo</td>
+                                <td>Producto/Servicio</td>
+                                <td>Cantidad</td>
+                                <td>U. Medida</td>
+                                <td>Precio Unit.</td>
+                                <td>Subtotal</td>
+                                ${venta.condIva === "Inscripto" ? `<td>Alicuota IVA</td>` : ""}
+                                ${venta.condIva === "Inscripto" ? `<td>Subtotal c/IVA</td>` : ""}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${trs}
+                        </tbody>
+                    </table>
+                </main>
+                <main class="totales">
+                    <div>
+                        <img src=${img} alt="2" />
+                    </div>
+
+                    <div>
+                        <p>CAE Nº: <span>${cae}</span></p>
+                        <p>Fecha de Vto. de CAE: <span>${vencimientoCae}</span></p>
+                    </div>
+                    <div>
+                        ${venta.condIva === "Inscripto" ? `<p class="IVA neto">Importe Neto Gravado:$<span>${venta.gravado21 + venta.gravado105}</span></p>` : ""}
+                        ${venta.condIva === "Inscripto" ? `<p class="IVA iva21">IVA 21%:$<span>${venta.iva21.toFixed(2)}</span></p>` : ""}
+                        ${venta.condIva === "Inscripto" ? `<p class="IVA iva105">IVA 10.5%:$<span>${venta.iva105.toFixed(2)}</span></p>` : ""}
+                        ${venta.condIva !== "Inscripto" ? `<p class="SinIVA">Subtotal<span>${venta.precioFinal}</span></p>` : ""}
+                        <p>Descuento:$ <span>${parseFloat(venta.descuento).toFixed(2)}</span></p>
+                        <p class='importeTotal'>Importe Total:$      <span>${venta.precioFinal - parseFloat(venta.descuento)}</span></p>
+                    </div>
+                </main>
+             `
+            },        
+        };
+        pdf.create(html,config).toFile(`pdfs/${venta.nro_comp}.pdf`,(err,res)=>{
+            if (err) {
+                console.log(err);
+            }else{
+                console.log(res)
+            }
+        })
+        res.send("a");
 }
 
 
 
-const verTipoComp = (codigoComprobante)=>{
+const verCodigoComp = (codigoComprobante)=>{
     if (codigoComprobante === 6) {
-        return "Cod: 006 - Factura B"
+        return "Cod: 006"
     }else if(codigoComprobante === 1){
-        return "Cod: 002 - Factura A"
+        return "Cod: 001"
     }else if(codigoComprobante === 3){
-        return "Cod: 003 - Nota Credito A"
+        return "Cod: 003"
     }else if(codigoComprobante === 4){
-        return "Cod: 004 - Recibos A"
+        return "Cod: 004"
     }else if(codigoComprobante === 8){
-        return "Cod: 008 - Nota Credito B"
+        return "Cod: 008"
     }else if(codigoComprobante === 9){
-        return "Cod: 009 - Recibos B"
+        return "Cod: 009"
+    }
+}
+
+const verTipoComp = (codigo)=>{
+    if(codigo === 1 || codigo === 4 ||  codigo === 3){
+        return "A"
+    }else{
+        return "B"
     }
 }
 
 module.exports = pdfCTRL;
+
+
+

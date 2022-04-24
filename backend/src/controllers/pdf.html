@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+   <!-- <link rel="stylesheet" href="../views/pdf.css"> -->
+    <style>
+        html{
+            zoom: 0.5;
+        }
+        header{
+            border: .2rem solid black;
+            display: -webkit-box;
+            -webkit-box-pack: justify;
+            padding: 1.5rem;
+        }
+
+        header p{
+            font-weight: bold;
+        }
+
+        header span{
+            font-weight: 100;
+        }
+
+        .tipoFactura div{
+            border: .2rem solid black;
+        }
+
+        .tipoFactura h2{
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .tipoFactura h2,.tipoFactura p{
+            padding: 0;
+            margin: 0;
+        }
+
+        .cliente{
+            border: .2rem solid black;
+        }
+
+        .cliente section{
+            display: -webkit-box;
+        }
+
+        .cliente section p{
+            font-weight: bold;
+            margin-left: 1rem;
+            margin-right: 6rem;
+        }
+
+        .cliente section span{
+            font-weight: 100;
+        }
+
+        .productos{
+            height:30rem;
+        }
+        .productos table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .productos table thead tr{
+            background-color: lightgray;
+        }
+
+        .productos table thead td{
+            border: .2rem solid black;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .productos table tbody .izquierda{
+            text-align: end;
+        }
+
+        .totales{
+            border: .2rem solid black;
+            display: -webkit-box;
+            -webkit-box-pack: justify;
+            padding: 2rem;
+        }
+        .totales p{
+            font-weight: bold;
+        }
+
+        .qr{
+            display: -webkit-box;
+            -webkit-box-pack: justify;
+            padding: 2rem;
+        }
+
+        img{
+            width: 50%;
+        }
+        .none{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    
+        <main class="qr"> 
+            <div class="none">
+                <img src="{{image}}" alt="" />
+            </div>
+
+            <div class="cae none">
+                <p>CAE Nº: <span>{{cae}}</span></p>
+                <p>Fecha de Vto. de CAE: <span>{{vencimientoCae}}</span></p>
+            </div>
+        </main>
+</body>
+<script src="../views/pdf.js"></script>
+</html>

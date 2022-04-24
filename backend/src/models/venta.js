@@ -14,6 +14,12 @@ const Venta = new Schema({
         type: String,
         default: "A Consumidor Final"
     },
+    gravado:{
+        type:Number,
+    },
+    ivanormal:{
+        type:Number,
+    },
     cliente: {
         type: String,
         required: true
