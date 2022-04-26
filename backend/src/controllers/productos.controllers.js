@@ -10,9 +10,14 @@ productosCTRL.traerProductos = async(req,res)=>{
             productos = await Productos.find({[tipoBusqueda]: {$regex: re, $options: 'i'}}).sort({descripcion: 1}).limit(50)
     }else if(texto !== "textoVacio"){
                const re = new RegExp(`^${texto}`)
-            productos = await Productos.find({[tipoBusqueda]: {$regex: re,$options:'i'}}).sort({descripcion: 1}).limit(50)
+            if (tipoBusqueda === "marca") {
+                productos = await Productos.find({[tipoBusqueda]: {$regex: re,$options:'i'}}).sort({descripcion: 1})
+            }else{
+                productos = await Productos.find({[tipoBusqueda]: {$regex: re,$options:'i'}}).sort({descripcion: 1}).limit(50)
+            }
     }else if(tipoBusqueda === "dolar"){
-            productos = await Productos.find({costodolar: {$not:{$eq:0}}});
+        console.log("Dolar")
+            productos = await Productos.find({costodolar: {$ne: 0}});
     }else{
             productos = await Productos.find().sort({descripcion: 1}).limit(50);
 

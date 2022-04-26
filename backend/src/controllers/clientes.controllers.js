@@ -4,9 +4,16 @@ const Clientes = require('../models/cliente')
 
 clienteCTRL.traerClientes = async(req,res)=>{
     const {identificador} = req.params
-    const re = new RegExp(`^${identificador}`)
     let clientes
-    clientes = await Clientes.find({cliente: {$regex: re,$options: 'i'}}).sort({identificador:1}).limit(20)
+    if(identificador[0] === "*"){
+        const contenga = identificador.substr(1);
+        const re = new RegExp(`${contenga}`)
+        clientes = await Clientes.find({cliente: {$regex: re,$options: 'i'}}).sort({identificador:1}).limit(20);
+    }else{
+        const re = new RegExp(`^${identificador}`)
+        clientes = await Clientes.find({cliente: {$regex: re,$options: 'i'}}).sort({identificador:1}).limit(20);
+        
+    }
     res.send(clientes)
 }
 

@@ -16,24 +16,28 @@ cuentaCompCTRL.tamanioCompensadas = async(req,res)=>{
 
 cuentaCompCTRL.traerCompensada = async(req,res)=>{
     const {id} = req.params;
-    const compensada = await CuentaComp.find({nro_comp:id});
+    let compensada = await CuentaComp.find({$and:[{nro_comp:id},{saldo:{$ne:0}}]});
+    compensada = compensada.filter(compensada=>compensada.saldo !== 0);
     res.send(compensada);
 }
 
 
 cuentaCompCTRL.traerCompensadasPorCliente = async(req,res)=>{
     const {codigo} = req.params;
-    const compensadas = await CuentaComp.find({codigo:codigo});
+    let compensadas = await CuentaComp.find({$and:[{codigo:codigo},{saldo:{$ne:0}}]});
+    compensadas = compensadas.filter(compensada=>compensada.saldo !== 0);
     res.send(compensadas);
 }
 
 cuentaCompCTRL.cargarCompensada = async(req,res)=>{
     const nuevaCompensada = new CuentaComp(req.body);
     nuevaCompensada.save();
+    console.log(`Compensada ${req.body.nro_comp} cargada`)
     res.send("Nueva compensada cargada");
 }
 cuentaCompCTRL.modificarCompensada = async(req,res)=>{
     const {id} = req.params;
+    delete req.body._id
     const compensada = await CuentaComp.findOneAndUpdate({nro_comp:id},req.body);
     res.send(`Compensada ${id} Modificada`);
 }

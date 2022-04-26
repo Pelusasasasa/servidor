@@ -36,7 +36,8 @@ cuentaHistoricaCTRL.traerHistoricaCliente = async(req,res)=>{
 
 cuentaHistoricaCTRL.modificarHistorica = async(req,res)=>{
     const {id} = req.params;
-    const historica = await CuentaHisto.findOneAndUpdate(({nro_comp:id}),req.body);
+    delete req.body._id
+    const historica = await CuentaHisto.updateOne(({nro_comp:id}),req.body);
     res.send(`Historica ${id} Modificada`)
 }
 cuentaHistoricaCTRL.eliminarCuenta = async(req,res)=>{

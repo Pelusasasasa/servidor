@@ -31,6 +31,7 @@ PresupuestoCTRL.traerTamanio = async(req,res)=>{
 PresupuestoCTRL.modificarPresupuesto = async(req,res) =>{
     console.log(req.params)
     const {id} = req.params;
+    delete req.body._id
     const presupuesto = await Presupuesto.findOneAndUpdate({nro_comp:id},req.body);
     res.send(presupuesto)
 }

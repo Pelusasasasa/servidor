@@ -106,7 +106,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
                         </section>
                         <section>
                             <p>Condicion frente al IVA:<span>${venta.condIva === "" ? "Consumidor Final" : venta.condIva}</span></p>
-                            <p>Domicilio Comercial:<span></span></p>
+                            <p>Domicilio Comercial:<span>${venta.domicilio}</span></p>
                         </section>
                         <section class="condicion">
                             <p>Condicion de Venta:<span>${venta.tipo_pago === "CC" ? "Cuenta Corriente" : "Contado"}</span></p>

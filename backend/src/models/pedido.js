@@ -15,7 +15,7 @@ const Pedido = new Schema({
     },
     cantidad:{
         type: Number,
-        required: false
+        default: 0
     },
     cliente:{
         type: String,
@@ -36,6 +36,10 @@ const Pedido = new Schema({
     estadoPedido: {
         type: String,
         default: "Sin Pedir"
+    },
+    observacion:{
+     type:String,
+     default:""       
     }
 })
 
