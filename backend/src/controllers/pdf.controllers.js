@@ -13,7 +13,7 @@ let html = fs.readFileSync(__dirname + '/pdf.html','utf8');
 
 pdfCTRL.crearPdf = async(req,res)=>{
 
-    const [venta,cliente,{QR,cae,vencimientoCae,texto}] = req.body;
+    const [venta,cliente,{QR,cae,vencimientoCae,texto,numero}] = req.body;
     let trs = "";
     venta.productos.forEach(({objeto,cantidad})=>{
         trs = trs + `<tr>
@@ -92,7 +92,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
                     </div>
                     <div class="derecha">
                         <p>FACTURA</p>
-                        <p>Punto de Venta:<span> 00004</span> Comp.Nro: <span>${venta.nro_comp.split("-")[1]}</span></p>
+                        <p>Punto de Venta:<span> 0005</span> Comp.Nro: <span>${numero.toString().padStart(8,'0')}</span></p>
                         <p>Fecha de Emision: <span>${day}/${month}/${year}</span></p>
                         <p>CUIT:<span> 27165767433</span></p>
                         <p>Ingresos brutos:<span> 27165767433</span></p>
@@ -106,7 +106,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
                         </section>
                         <section>
                             <p>Condicion frente al IVA:<span>${venta.condIva === "" ? "Consumidor Final" : venta.condIva}</span></p>
-                            <p>Domicilio Comercial:<span>${venta.domicilio}</span></p>
+                            <p>Domicilio Comercial:<span>${venta.direccion}</span></p>
                         </section>
                         <section class="condicion">
                             <p>Condicion de Venta:<span>${venta.tipo_pago === "CC" ? "Cuenta Corriente" : "Contado"}</span></p>
@@ -131,7 +131,13 @@ pdfCTRL.crearPdf = async(req,res)=>{
                         </tbody>
                     </table>
                 </main>
-                <main class="totales">
+         
+             `
+            },
+            footer:{
+                "height": "45mm",
+                "contents": `
+                    <main class="totales">
                     <div>
                         <img src=${img} alt="2" />
                     </div>
@@ -141,18 +147,18 @@ pdfCTRL.crearPdf = async(req,res)=>{
                         <p>Fecha de Vto. de CAE: <span>${vencimientoCae}</span></p>
                     </div>
                     <div>
-                        ${venta.condIva === "Inscripto" ? `<p class="IVA neto">Importe Neto Gravado:$<span>${venta.gravado21 + venta.gravado105}</span></p>` : ""}
-                        ${venta.condIva === "Inscripto" ? `<p class="IVA iva21">IVA 21%:$<span>${venta.iva21.toFixed(2)}</span></p>` : ""}
-                        ${venta.condIva === "Inscripto" ? `<p class="IVA iva105">IVA 10.5%:$<span>${venta.iva105.toFixed(2)}</span></p>` : ""}
-                        ${venta.condIva !== "Inscripto" ? `<p class="SinIVA">Subtotal<span>${venta.precioFinal}</span></p>` : ""}
+                        ${venta.condIva === "Inscripto" ? `<p class="IVA neto">Importe Neto Gravado: $<span>${venta.gravado21 + venta.gravado105}</span></p>` : ""}
+                        ${venta.condIva === "Inscripto" ? `<p class="IVA iva21">IVA 21%: $<span>${venta.iva21.toFixed(2)}</span></p>` : ""}
+                        ${venta.condIva === "Inscripto" ? `<p class="IVA iva105">IVA 10.5%: $<span>${venta.iva105.toFixed(2)}</span></p>` : ""}
+                        ${venta.condIva !== "Inscripto" ? `<p class="SinIVA">Subtotal: $<span>${venta.precioFinal}</span></p>` : ""}
                         <p>Descuento:$ <span>${parseFloat(venta.descuento).toFixed(2)}</span></p>
-                        <p class='importeTotal'>Importe Total:$      <span>${venta.precioFinal - parseFloat(venta.descuento)}</span></p>
+                        <p class='importeTotal'>Importe Total: $      <span>${venta.precioFinal - parseFloat(venta.descuento)}</span></p>
                     </div>
-                </main>
-             `
-            },        
+            </main>
+                `
+            }      
         };
-        pdf.create(html,config).toFile(`pdfs/${venta.nro_comp}.pdf`,(err,res)=>{
+        pdf.create(html,config).toFile(`pdfs/${venta.nro_comp}--${venta.nombreCliente}--${venta.tipo_comp}.pdf`,(err,res)=>{
             if (err) {
                 console.log(err);
             }else{

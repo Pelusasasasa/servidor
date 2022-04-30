@@ -20,6 +20,7 @@ const Venta = new Schema({
     ivanormal:{
         type:Number,
     },
+    direccion:String,
     cliente: {
         type: String,
         required: true

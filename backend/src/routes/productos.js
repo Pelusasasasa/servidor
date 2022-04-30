@@ -1,11 +1,12 @@
 const {Router} = require("express");
 const router = Router();
 
-const {crearProducto,traerProductos,getproducto,modificarProducto,borrarProducto,productosPorMarca,traerProductosPorRango,stockNegativo,traerMarcas} = require("../controllers/productos.controllers");
+const {crearProducto,traerProductos,modificarProductos,getproducto,modificarProducto,borrarProducto,productosPorMarca,traerProductosPorRango,stockNegativo,traerMarcas} = require("../controllers/productos.controllers");
 
 router.route('/')
     .post(crearProducto)
     .get(traerMarcas)
+    .put(modificarProductos)
 router.route('/buscarProducto/:texto/:tipoBusqueda')
     .get(traerProductos)
 

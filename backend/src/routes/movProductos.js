@@ -1,10 +1,9 @@
 const {Router} = require("express");
 const router = Router();
 
-const {tamanioMovProductos,cargarMovimientoProducto,traerMovProducto,traerMoviemientoPorNumeroYTipo,modificarMovimiento} = require("../controllers/movProductos.controllers");
+const {cargarMovimientoProducto,traerMovProducto,traerMoviemientoPorNumeroYTipo,modificarMovimiento} = require("../controllers/movProductos.controllers");
 
 router.route('/')
-    .get(tamanioMovProductos)
     .post(cargarMovimientoProducto);
 
 router.route('/:id')

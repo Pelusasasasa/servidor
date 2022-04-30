@@ -1,0 +1,15 @@
+
+> backend@1.0.0 dev
+> nodemon src/index.js
+
+[33m[nodemon] 2.0.15[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,json[39m
+[32m[nodemon] starting `node src/index.js`[39m
+DB is conected
+Movimiento 14226 Modificado
+Movimiento 14227 Modificado
+{ id: '0001-00029331' }
+Cliente LORENZATTO AGUSTIN modificado
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m

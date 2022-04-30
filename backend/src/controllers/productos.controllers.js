@@ -53,6 +53,15 @@ productosCTRL.modificarProducto = async(req,res)=>{
     res.send("Producto Modificado")
 }
 
+productosCTRL.modificarProductos = async(req,res)=>{
+    const arreglo = req.body;
+    for await(let producto of arreglo){
+        await Productos.findByIdAndUpdate({_id:producto._id});
+        console.log(`Stock de ${producto.descripcion} es: ${producto.stock}`)
+    }
+    res.send("producto Modificado")
+}
+
 productosCTRL.borrarProducto = async(req,res)=>{
     const {id} = req.params;
     await Productos.findByIdAndDelete({_id:id})
