@@ -3,14 +3,8 @@ const cuentaHistoricaCTRL = {};
 const CuentaHisto = require('../models/CueCorrHist')
 
 cuentaHistoricaCTRL.tamanioHistorica = async(req,res)=>{
-   const historica = (await CuentaHisto.find());
-    let tamanio = historica.length
-    let ultimaVenta;
-    if (tamanio !== 0) {
-        ultimaVenta = historica[tamanio-1]._id 
-    }else{
-        ultimaVenta = 0;
-    }
+   const historica = (await CuentaHisto.find().sort({$natural:-1}).limit(1))[0];
+    let ultimaVenta = historica._id;
     res.send(`${ultimaVenta}`);
 }
 

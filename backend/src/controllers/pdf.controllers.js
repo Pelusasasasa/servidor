@@ -15,31 +15,33 @@ pdfCTRL.crearPdf = async(req,res)=>{
 
     const [venta,cliente,{QR,cae,vencimientoCae,texto,numero}] = req.body;
     let trs = "";
+    if (venta.tipo_comp === "Ticket Factura") {
     venta.productos.forEach(({objeto,cantidad})=>{
         trs = trs + `<tr>
                             <td>${objeto._id}</td>
                             <td>${objeto.descripcion}</td>
                             <td class="izquierda">${parseFloat(cantidad).toFixed(2)}</td>
                             <td class="izquierda">${objeto.unidad}</td>
-
                             ${venta.condIva !== "Inscripto" ? `<td class="izquierda">${parseFloat(objeto.precio_venta).toFixed(2)}</td>` : ""}
-
                             ${(venta.condIva === "Inscripto" && objeto.iva === "N") ? `<td class="izquierda">${(parseFloat(objeto.precio_venta)/1.21).toFixed(2)}</td>` : ""}
-
                             ${(venta.condIva === "Inscripto" && objeto.iva === "R") ? `<td class="izquierda">${(parseFloat(objeto.precio_venta)/1.105).toFixed(2)}</td>` : ""}
-                            
                             ${venta.condIva !== "Inscripto" ? `<td class="izquierda">${(parseFloat(cantidad)*parseFloat(objeto.precio_venta)).toFixed(2)}</td>` : ""}
-
                             ${(venta.condIva === "Inscripto" && objeto.iva === "N") ? `<td class="izquierda">${((parseFloat(cantidad)*parseFloat(objeto.precio_venta))/1.21).toFixed(2)}</td>`  : ""}
-
                             ${(venta.condIva === "Inscripto" && objeto.iva === "R") ? `<td class="izquierda">${((parseFloat(cantidad)*parseFloat(objeto.precio_venta))/1.105).toFixed(2)}</td>`  : ""}
-
                             ${(venta.condIva === "Inscripto" && objeto.iva === "N") ? `<td class="izquierda">21%</td>`  : "" }
                             ${(venta.condIva === "Inscripto" && objeto.iva === "R") ? `<td class="izquierda">10.5%</td>`  : "" }
-
                             ${(venta.condIva === "Inscripto") ? `<td class="izquierda">${(parseFloat(cantidad)*parseFloat(objeto.precio_venta)).toFixed(2)}</td>`  : "" }
                        </tr>`;
-    });
+        });
+    }else{
+        venta.productos.forEach(ticket=>{
+            trs = trs + `<tr>
+                                <td>${ticket.fecha}</td>
+                                <td>${ticket.numero}</td>
+                                <td>${ticket.pagado}</td>
+                           </tr>`;
+            });
+    }
 
     const date = new Date(venta.fecha);
     let day = date.getDate();
@@ -71,7 +73,14 @@ pdfCTRL.crearPdf = async(req,res)=>{
     html = html.replace('{{cae}}', cae);
     html = html.replace('{{vencimientoCae}}', vencimientoCae);
 
-
+    let textoFactura = "";
+    if(venta.tipo_comp === "Recibos"){
+        textoFactura = "RECIBO";
+    }else if(venta.tipo_comp === "Ticket Factura"){
+        textoFactura = "FACTURA";
+    }else{
+        textoFactura === "NOTA CREDITO"
+    }
 
     const config = {
          "height": "10.5in", "width": "8in",  "format" : "A4", "type": "pdf", "zoomFactor": "0.65",
@@ -91,7 +100,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
                         </div>
                     </div>
                     <div class="derecha">
-                        <p>FACTURA</p>
+                        <p>${textoFactura}</p>
                         <p>Punto de Venta:<span> 0005</span> Comp.Nro: <span>${numero.toString().padStart(8,'0')}</span></p>
                         <p>Fecha de Emision: <span>${day}/${month}/${year}</span></p>
                         <p>CUIT:<span> 27165767433</span></p>
@@ -109,21 +118,21 @@ pdfCTRL.crearPdf = async(req,res)=>{
                             <p>Domicilio Comercial:<span>${venta.direccion}</span></p>
                         </section>
                         <section class="condicion">
-                            <p>Condicion de Venta:<span>${venta.tipo_pago === "CC" ? "Cuenta Corriente" : "Contado"}</span></p>
+                            <p>Condicion de Venta:<span>${venta.tipo_pago !== "CC" || venta.cliente === "M122" ? "Contado" : "Cuenta Corriente"}</span></p>
                         </section>
                 </main>
                 <main class="productos">
                     <table>
                         <thead>
                             <tr>
-                                <td>Codigo</td>
-                                <td>Producto/Servicio</td>
-                                <td>Cantidad</td>
-                                <td>U. Medida</td>
-                                <td>Precio Unit.</td>
-                                <td>Subtotal</td>
-                                ${venta.condIva === "Inscripto" ? `<td>Alicuota IVA</td>` : ""}
-                                ${venta.condIva === "Inscripto" ? `<td>Subtotal c/IVA</td>` : ""}
+                                ${venta.tipo_comp === "Recibos" ? "<td>Fecha</td>"  : "<td>Codigo</td>"}
+                                ${venta.tipo_comp === "Recibos" ? "<td>Nro. Comprobante</td>" :"<td>Producto/Servicio</td>"}
+                                ${venta.tipo_comp === "Recibos" ? "<td>Pagado</td>" : "<td>Cantidad</td>"} 
+                                ${venta.tipo_comp === "Recibos" ? "" : "<td>U. Medida</td>"}
+                                ${venta.tipo_comp === "Recibos" ? "" : "<td>Precio Unit.</td>"}
+                                ${venta.tipo_comp === "Recibos" ? "" : "<td>Subtotal</td>"}
+                                ${(venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? `<td>Alicuota IVA</td>` : ""}
+                                ${(venta.condIva === "Inscripto"  && venta.tipo_comp === "Ticket Factura") ? `<td>Subtotal c/IVA</td>` : ""}
                             </tr>
                         </thead>
                         <tbody>
@@ -147,12 +156,12 @@ pdfCTRL.crearPdf = async(req,res)=>{
                         <p>Fecha de Vto. de CAE: <span>${vencimientoCae}</span></p>
                     </div>
                     <div>
-                        ${venta.condIva === "Inscripto" ? `<p class="IVA neto">Importe Neto Gravado: $<span>${venta.gravado21 + venta.gravado105}</span></p>` : ""}
-                        ${venta.condIva === "Inscripto" ? `<p class="IVA iva21">IVA 21%: $<span>${venta.iva21.toFixed(2)}</span></p>` : ""}
-                        ${venta.condIva === "Inscripto" ? `<p class="IVA iva105">IVA 10.5%: $<span>${venta.iva105.toFixed(2)}</span></p>` : ""}
-                        ${venta.condIva !== "Inscripto" ? `<p class="SinIVA">Subtotal: $<span>${venta.precioFinal}</span></p>` : ""}
+                        ${(venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? `<p class="IVA neto">Importe Neto Gravado: $<span>${venta.gravado21 + venta.gravado105}</span></p>` : ""}
+                        ${(venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? `<p class="IVA iva21">IVA 21%: $<span>${venta.iva21.toFixed(2)}</span></p>` : ""}
+                        ${(venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? `<p class="IVA iva105">IVA 10.5%: $<span>${venta.iva105.toFixed(2)}</span></p>` : ""}
+                        ${venta.condIva !== "Inscripto" ? `<p class="SinIVA">Subtotal: $<span>${venta.precioFinal + parseFloat(venta.descuento)}</span></p>` : ""}
                         <p>Descuento:$ <span>${parseFloat(venta.descuento).toFixed(2)}</span></p>
-                        <p class='importeTotal'>Importe Total: $      <span>${venta.precioFinal - parseFloat(venta.descuento)}</span></p>
+                        <p class='importeTotal'>Importe Total: $      <span>${venta.precioFinal}</span></p>
                     </div>
             </main>
                 `

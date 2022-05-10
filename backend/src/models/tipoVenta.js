@@ -6,6 +6,8 @@ const tipoVenta = new Schema({
    "Ultima Factura B": String,
    "Ultima N Credito A":String,
    "Ultima N Credito B":String,
+   "Ultima Recibo A":String,
+   "Ultima Recibo B":String,
    "Ultima N Debito A":String,
    "Ultima N Debito B":String,
    "Ultimo Recibo": String,

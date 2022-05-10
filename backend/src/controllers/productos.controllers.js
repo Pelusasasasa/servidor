@@ -16,7 +16,6 @@ productosCTRL.traerProductos = async(req,res)=>{
                 productos = await Productos.find({[tipoBusqueda]: {$regex: re,$options:'i'}}).sort({descripcion: 1}).limit(50)
             }
     }else if(tipoBusqueda === "dolar"){
-        console.log("Dolar")
             productos = await Productos.find({costodolar: {$ne: 0}});
     }else{
             productos = await Productos.find().sort({descripcion: 1}).limit(50);
@@ -56,7 +55,7 @@ productosCTRL.modificarProducto = async(req,res)=>{
 productosCTRL.modificarProductos = async(req,res)=>{
     const arreglo = req.body;
     for await(let producto of arreglo){
-        await Productos.findByIdAndUpdate({_id:producto._id});
+        await Productos.findByIdAndUpdate({_id:producto._id},producto);
         console.log(`Stock de ${producto.descripcion} es: ${producto.stock}`)
     }
     res.send("producto Modificado")

@@ -45,14 +45,8 @@ ventasCTRL.entreFechasConCliente = async(req,res) => {
 }
 
 ventasCTRL.traerTamanio = async(req,res) => {
-    const ventas = await Ventas.find();
-    const tamanio = ventas.length;
-    let ultimaVenta;
-    if (tamanio !== 0) {
-        ultimaVenta = ventas[tamanio-1]._id 
-    }else{
-        ultimaVenta = 0;
-    }
+    const venta = (await Ventas.find().sort({$natural:-1}).limit(1))[0];
+    let ultimaVenta = venta._id;
     res.send(`${ultimaVenta }`)
 }
 

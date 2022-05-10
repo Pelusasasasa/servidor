@@ -3,15 +3,9 @@ const cuentaCompCTRL = {};
 const CuentaComp = require('../models/CueCorrComp');
 
 cuentaCompCTRL.tamanioCompensadas = async(req,res)=>{
-    const compensadas = (await CuentaComp.find());
-    let tamanio = compensadas.length
-    let ultimaVenta;
-    if (tamanio !== 0) {
-        ultimaVenta = compensadas[tamanio-1]._id 
-    }else{
-        ultimaVenta = 0;
-    }
-    res.send(`${ultimaVenta}`);
+    const compensada = (await CuentaComp.find().sort({$natural:-1}).limit(1))[0];
+    let ultimaVenta = compensada._id;
+    res.send(`${ultimaVenta}`); 
 }
 
 cuentaCompCTRL.traerCompensada = async(req,res)=>{

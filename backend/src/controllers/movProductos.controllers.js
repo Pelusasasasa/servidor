@@ -5,13 +5,22 @@ const movProducto = require("../models/movProducto");
 movProductosCTRL.traerMovProducto = async(req,res)=>{
     const {id} = req.params;
     const movimientos = await movProducto.find({codProd: id})
-    console.log(movimientos)
     res.send(movimientos)
-} 
+}
+
+movProductosCTRL.modificarVarios = async(req,res)=>{
+    const arreglo = req.body;
+    for await(let movimiento of arreglo){
+        await movProducto.findOneAndUpdate({_id:movimiento._id},movimiento);
+        console.log(`Moviemiento con el id: ${movimiento._id} --- ${movimiento.descripcion} Modificado`)
+    }
+    res.send("Movimientos modificados")
+}
+
+
 movProductosCTRL.cargarMovimientoProducto = async(req,res)=>{
-    let movimientos = (await movProducto.find());
-    let tamanio = movimientos.length;
-    let id = movimientos[tamanio-1]._id
+    let ultimoMovimiento = await movProducto.find().sort({$natural:-1}).limit(1)
+    let id = ultimoMovimiento[0]._id;
     const arreglo = req.body;
     console.log("El id inicial es : " + id)
     for await(let movimiento of arreglo){
@@ -33,6 +42,7 @@ movProductosCTRL.traerMoviemientoPorNumeroYTipo = async(req,res)=>{
 
 movProductosCTRL.modificarMovimiento = async(req,res)=>{
     const {id} = req.params;
+    delete req.body._id;
     await movProducto.findOneAndUpdate({_id:id},req.body);
     console.log(`Movimiento ${id} Modificado`)
     res.send(`Movimiento ${id} Modificado`);
