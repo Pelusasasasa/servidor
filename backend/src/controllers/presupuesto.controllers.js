@@ -13,7 +13,7 @@ PresupuestoCTRL.cargarPresupuesto = async(req,res)=>{
 PresupuestoCTRL.traerPresupuesto = async(req,res)=>{
     const {id:nro_comp} = req.params;
     const presupuesto = await Presupuesto.find({nro_comp:nro_comp});
-    res.send(presupuesto)
+    res.send(presupuesto[0])
 }
 
 PresupuestoCTRL.traerTamanio = async(req,res)=>{
