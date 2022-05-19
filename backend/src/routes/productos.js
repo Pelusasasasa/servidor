@@ -1,7 +1,18 @@
 const {Router} = require("express");
 const router = Router();
 
-const {crearProducto,traerProductos,modificarProductos,getproducto,modificarProducto,borrarProducto,productosPorMarca,traerProductosPorRango,stockNegativo,traerMarcas} = require("../controllers/productos.controllers");
+const multer = require('multer');
+const storage = multer.diskStorage({
+            destination:(req,file,cb)=>{
+            cb(null,"imagenes");
+            },
+            filename:(req,file,cb)=>{
+                cb(null,`${Date.now()}-${file.originalname}`);
+            }}
+    );
+
+const upload = multer({storage});
+const {crearProducto,traerProductos,modificarProductos,getproducto,modificarProducto,borrarProducto,productosPorMarca,traerProductosPorRango,stockNegativo,traerMarcas,subirImagen,mostrarImagen} = require("../controllers/productos.controllers");
 
 router.route('/')
     .post(crearProducto)
@@ -20,6 +31,8 @@ router.route('/:productosEntreRangos/:desde/:hasta')
 
 router.route('/marcas/:marca')
     .get(productosPorMarca)
-
+router.route('/:id/image')
+    .put(upload.single('imagen'),subirImagen)
+    .get(upload.single('imagen'),mostrarImagen)
 
 module.exports = router
