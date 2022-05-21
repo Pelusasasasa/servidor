@@ -10,7 +10,12 @@ productosCTRL.traerProductos = async(req,res)=>{
             const re = new RegExp(`${contenga}`)
             productos = await Productos.find({[tipoBusqueda]: {$regex: re, $options: 'i'}}).sort({descripcion: 1}).limit(50)
     }else if(texto !== "textoVacio"){
-               const re = new RegExp(`^${texto}`)
+            let re   
+            try {
+                re = new RegExp(`^${texto}`);
+               } catch (error) {
+                re = "a" 
+               }
             if (tipoBusqueda === "marca") {
                 productos = await Productos.find({[tipoBusqueda]: {$regex: re,$options:'i'}}).sort({descripcion: 1})
             }else{
