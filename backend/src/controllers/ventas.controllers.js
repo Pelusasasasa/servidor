@@ -50,6 +50,12 @@ ventasCTRL.traerTamanio = async(req,res) => {
     res.send(`${ultimaVenta }`)
 }
 
+ventasCTRL.traerTicket = async(req,res)=>{
+    const {numero,tipo,condIva} = req.params;
+    const venta = (await Ventas.find({nro_comp:numero,tipo:tipo,condIva:condIva}))[0];
+    res.send(venta)
+}
+
 ventasCTRL.eliminarVenta = async(req,res)=>{
     const {id} = req.params;
     const a = await Ventas.findOneAndDelete({nro_comp:id}); 

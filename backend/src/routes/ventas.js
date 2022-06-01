@@ -2,7 +2,7 @@ const {Router} = require("express");
 const { get } = require("express/lib/response");
 const router = Router();
 
-const {cargarVenta,traerVentas,modificarVentas,entreFechas,entreFechasConId,traerTamanio,eliminarVenta,entreFechasConCliente,traerVentaUnica} = require("../controllers/ventas.controllers")
+const {cargarVenta,traerVentas,modificarVentas,entreFechas,entreFechasConId,traerTamanio,eliminarVenta,traerTicket,entreFechasConCliente,traerVentaUnica} = require("../controllers/ventas.controllers")
 
 router.route('/')
     .get(traerTamanio)
@@ -15,6 +15,9 @@ router.route('/:id')
 
 router.route('/:desde/:hasta')
     .get(entreFechas)
+
+router.route('/factura/:numero/:tipo/:condIva')
+    .get(traerTicket)
 
 router.route('/:id/:desde/:hasta')
     .get(entreFechasConId)
