@@ -109,17 +109,79 @@
     </style>
 </head>
 <body>
-    
-        <main class="qr"> 
-            <div class="none">
-                <img src="{{image}}" alt="" />
+    <header>
+        <div class="izquierdo">
+            <p>GIANOVI MARINA ISABEL</p>
+            <p>Razon Social:<span> GIANOVI MARINA ISABEL</span></p>
+            <p>Domicilio Comercial:<span> Av. 9 De Julio 3380 - Chajari, Entre Rios</span></p>
+            <p>Condicion Frente al IVA:<span> IVA Responsable Inscripto</span></p>
+        </div>
+        <div class="tipoFactura">
+            <div class="div">
+                <h2>{{tipoCompropobante}}</h2>
+                <p>{{codigoComprobante}}</p>
             </div>
+        </div>
+        <div class="derecha">
+            <p>{{textoFactura}}</p>
+            <p>Punto de Venta:<span> 0005</span> Comp.Nro: <span>{{numero}}</span></p>
+            <p>Fecha de Emision: <span>{{day}}/{{month}}/{{year}}</span></p>
+            <p>CUIT:<span> 27165767433</span></p>
+            <p>Ingresos brutos:<span> 27165767433</span></p>
+            <p>Fecha de Inicio de Actividades:<span>01/09/2007</span></p>
+        </div>
+    </header>
+    <main class="cliente">
+        <section>
+            <p>Apellido y Nombre / Razon Social:<span>{{venta.nombreCliente}}</span></p>
+            <p>{{dniocuit}}:<span>{{dnicuit}}}</span></p>
+        </section>
+        <section>
+            <p>Condicion frente al IVA:<span>{{condIva}}</span></p>
+            <p>Domicilio Comercial:<span>{{direccion}}</span></p>
+        </section>
+        <section class="condicion">
+            <p>Condicion de Venta:<span>{{condVenta}}</span></p>
+        </section>
+    </main>
+    <main class="productos">
+        <table>
+            <thead>
+                <tr>
+                    {{codigo}}
+                    {{productoServicion}}
+                    {{cantidad}} 
+                    {{medida}}
+                    {{precioU}}
+                    {{subtotal}}
+                    {{alicuota}}
+                    {{subtotalIva}}
+                </tr>
+            </thead>
+            <tbody>
+                ${trs}
+            </tbody>
+        </table>
+    </main> 
+    <main class="totales"> 
+        <div>
+            <img src="{{image}}" alt="" />
+        </div>
 
-            <div class="cae none">
-                <p>CAE Nº: <span>{{cae}}</span></p>
-                <p>Fecha de Vto. de CAE: <span>{{vencimientoCae}}</span></p>
-            </div>
-        </main>
+        <div class="cae">
+            <p>CAE Nº: <span>{{cae}}</span></p>
+            <p>Fecha de Vto. de CAE: <span>{{vencimientoCae}}</span></p>
+        </div>
+
+        <div>
+            {{importeNeto}}
+            {{iva21}}
+            {{iva105}}
+            {{subtotal}}
+            <p>Descuento:$ <span>{{descuento}}</span></p>
+            <p class='importeTotal'>Importe Total: $      <span>{{precioFinal}}</span></p>
+        </div>
+    </main>
 </body>
 <script src="../views/pdf.js"></script>
 </html>

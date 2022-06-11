@@ -15,7 +15,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
 
     const [venta,cliente,{QR,cae,vencimientoCae,texto,numero}] = req.body;
     let trs = "";
-    if (venta.tipo_comp === "Ticket Factura") {
+    if (venta.tipo_comp === "Ticket Factura" || venta.tipo_comp === "Nota Credito") {
     venta.productos.forEach(({objeto,cantidad})=>{
         trs = trs + `<tr>
                             <td>${objeto._id}</td>
@@ -66,12 +66,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
     async function generarQR(texto) {
         const url = `https://www.afip.gob.ar/fe/qr/?p=${texto}`;
         return url
-    }
-
-
-    html = html.replace('{{image}}', img);
-    html = html.replace('{{cae}}', cae);
-    html = html.replace('{{vencimientoCae}}', vencimientoCae);
+    };
 
     let textoFactura = "";
     if(venta.tipo_comp === "Recibos"){
@@ -82,90 +77,49 @@ pdfCTRL.crearPdf = async(req,res)=>{
         textoFactura === "NOTA CREDITO"
     }
 
-    const config = {
-         "height": "10.5in", "width": "8in",  "format" : "A4", "type": "pdf", "zoomFactor": "0.65",
-         header:{
-             "contents":`
-                <header>
-                    <div class="izquierdo">
-                        <p>GIANOVI MARINA ISABEL</p>
-                        <p>Razon Social:<span> GIANOVI MARINA ISABEL</span></p>
-                        <p>Domicilio Comercial:<span> Av. 9 De Julio 3380 - Chajari, Entre Rios</span></p>
-                        <p>Condicion Frente al IVA:<span> IVA Responsable Inscripto</span></p>
-                    </div>
-                    <div class="tipoFactura">
-                        <div class="div">
-                            <h2>${tipoCompropobante}</h2>
-                            <p>${codigoComprobante}</p>
-                        </div>
-                    </div>
-                    <div class="derecha">
-                        <p>${textoFactura}</p>
-                        <p>Punto de Venta:<span> 0005</span> Comp.Nro: <span>${numero.toString().padStart(8,'0')}</span></p>
-                        <p>Fecha de Emision: <span>${day}/${month}/${year}</span></p>
-                        <p>CUIT:<span> 27165767433</span></p>
-                        <p>Ingresos brutos:<span> 27165767433</span></p>
-                        <p>Fecha de Inicio de Actividades:<span>01/09/2007</span></p>
-                    </div>
-                </header>
-                <main class="cliente">
-                        <section>
-                            <p>Apellido y Nombre / Razon Social:<span>${venta.nombreCliente}</span></p>
-                            <p>${venta.dnicuit.length === 8 ? 'DNI' : 'CUIT'}:<span>${venta.dnicuit}</span></p>
-                        </section>
-                        <section>
-                            <p>Condicion frente al IVA:<span>${venta.condIva === "" ? "Consumidor Final" : venta.condIva}</span></p>
-                            <p>Domicilio Comercial:<span>${venta.direccion}</span></p>
-                        </section>
-                        <section class="condicion">
-                            <p>Condicion de Venta:<span>${venta.tipo_pago !== "CC" || venta.cliente === "M122" ? "Contado" : "Cuenta Corriente"}</span></p>
-                        </section>
-                </main>
-                <main class="productos">
-                    <table>
-                        <thead>
-                            <tr>
-                                ${venta.tipo_comp === "Recibos" ? "<td>Fecha</td>"  : "<td>Codigo</td>"}
-                                ${venta.tipo_comp === "Recibos" ? "<td>Nro. Comprobante</td>" :"<td>Producto/Servicio</td>"}
-                                ${venta.tipo_comp === "Recibos" ? "<td>Pagado</td>" : "<td>Cantidad</td>"} 
-                                ${venta.tipo_comp === "Recibos" ? "" : "<td>U. Medida</td>"}
-                                ${venta.tipo_comp === "Recibos" ? "" : "<td>Precio Unit.</td>"}
-                                ${venta.tipo_comp === "Recibos" ? "" : "<td>Subtotal</td>"}
-                                ${(venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? `<td>Alicuota IVA</td>` : ""}
-                                ${(venta.condIva === "Inscripto"  && venta.tipo_comp === "Ticket Factura") ? `<td>Subtotal c/IVA</td>` : ""}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${trs}
-                        </tbody>
-                    </table>
-                </main>
-         
-             `
-            },
-            footer:{
-                "height": "45mm",
-                "contents": `
-                    <main class="totales">
-                    <div>
-                        <img src=${img} alt="2" />
-                    </div>
+    html = html.replace('{{tipoCompropobante}}',tipoCompropobante);
+    html = html.replace('{{codigoComprobante}}',codigoComprobante);
+    html = html.replace('{{textoFactura}}',textoFactura);
+    html = html.replace('{{numero}}',numero.toString().padStart(8,'0'));
+    html = html.replace('{{day}}',day);
+    html = html.replace('{{month}}',month);
+    html = html.replace('{{year}}',year);
+    //cliente
+    html = html.replace('{{cliente}}',venta.nombreCliente);
+    html = venta.dnicuit.length === 8 ? html.replace('{{dniocuit}}',"DNI") : html.replace('{{dniocuit}}','CUIT');
+    html = html.replace('{{dnicuit}}',venta.dnicuit);
+    html = venta.condIva === "" ? html.replace('{{condIva}}',"Consumidor Final") : html.replace('{{condIva}}',venta.condIva)
+    html = html.replace('{{direccion}}',venta.direccion);
+    html = html.replace('{{}}',);
+    html = (venta.tipo_pago !== "CC" || venta.cliente === "M122") ? html.replace('{{condVenta}}',"Contado") : html.replace('{{condVenta}}',"Cuenta Corriente")
+    html = html.replace('{{}}',);
 
-                    <div>
-                        <p>CAE Nº: <span>${cae}</span></p>
-                        <p>Fecha de Vto. de CAE: <span>${vencimientoCae}</span></p>
-                    </div>
-                    <div>
-                        ${(venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? `<p class="IVA neto">Importe Neto Gravado: $<span>${venta.gravado21 + venta.gravado105}</span></p>` : ""}
-                        ${(venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? `<p class="IVA iva21">IVA 21%: $<span>${venta.iva21.toFixed(2)}</span></p>` : ""}
-                        ${(venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? `<p class="IVA iva105">IVA 10.5%: $<span>${venta.iva105.toFixed(2)}</span></p>` : ""}
-                        ${venta.condIva !== "Inscripto" ? `<p class="SinIVA">Subtotal: $<span>${venta.precioFinal + parseFloat(venta.descuento)}</span></p>` : ""}
-                        <p>Descuento:$ <span>${parseFloat(venta.descuento).toFixed(2)}</span></p>
-                        <p class='importeTotal'>Importe Total: $      <span>${venta.precioFinal}</span></p>
-                    </div>
-            </main>
-                `
-            }      
+    //encabezado
+    html = venta.tipo_comp === "Recibos" ? html.replace('{{codigo}}',"<td>Fecha</td>")  : html.replace('{{codigo}}',"<td>Codigo</td>");
+    html = venta.tipo_comp === "Recibos" ? html.replace('{{productoServicio}}',"<td>Nro. Comprobante</td>") : html.replace('{{productoServicio}}',"<td>Producto/Servicio</td>");
+    html = venta.tipo_comp === "Recibos" ? html.replace('{{cantidad}}',"<td>Pagado</td>") : html.replace('{{cantidad}}',"<td>Cantidad</td>");
+    html = venta.tipo_comp === "Recibos" ? html.replace('{{medida}}',"") : html.replace('{{medida}}',"<td>U. Medida</td>");
+    html = venta.tipo_comp === "Recibos" ? html.replace('{{precioU}}',"") : html.replace('{{precioU}}',"<td>Precio Unit.</td>");
+    html = venta.tipo_comp === "Recibos" ? html.replace('{{subtotal}}',"") : html.replace('{{subtotal}}',"<td>Subtotal</td>");
+    html = (venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? html.replace('{{alicuota}}',`<td>Alicuota IVA</td>`) : html.replace('{{alicuota}}',"");
+    html = (venta.condIva === "Inscripto"  && venta.tipo_comp === "Ticket Factura") ? html.replace('{{subtotalIva}}',`<td>Subtotal c/IVA</td>`) : html.replace('{{subtotalIva}}',"");
+
+    //afip
+    html = html.replace('{{image}}', img);
+    html = html.replace('{{cae}}', cae);
+    html = html.replace('{{vencimientoCae}}', vencimientoCae);
+
+    //totales
+    html = (venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? html.replace('{{importeNeto}}',`<p class="IVA neto">Importe Neto Gravado: $<span>${venta.gravado21 + venta.gravado105}</span></p>`) : html.replace('{{importeNeto}}',"");
+    html = (venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? html.replace('{{iva21}}',`<p class="IVA iva21">IVA 21%: $<span>${venta.iva21.toFixed(2)}</span></p>`) : html.replace('{{iva21}}',"");
+    html = (venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? html.replace('{{iva105}}',`<p class="IVA iva105">IVA 10.5%: $<span>${venta.iva105.toFixed(2)}</span></p>`) : html.replace('{{iva105}}',"");
+    html = venta.condIva !== "Inscripto" ? html.replace('{{subtotal}}',`<p class="SinIVA">Subtotal: $<span>${venta.precioFinal + parseFloat(venta.descuento)}</span></p>`) : html.replace('{{subtotal}}',"");
+    html = html.replace('{{descuento}}',parseFloat(venta.descuento).toFixed(2));
+    html = html.replace('{{precioFinal}}',venta.precioFinal);
+
+
+    const config = {
+         "height": "10.5in", "width": "8in",  "format" : "A4", "type": "pdf", "zoomFactor": "0.65",    
         };
         pdf.create(html,config).toFile(`pdfs/${venta.nro_comp}--${venta.nombreCliente}--${venta.tipo_comp}.pdf`,(err,res)=>{
             if (err) {
