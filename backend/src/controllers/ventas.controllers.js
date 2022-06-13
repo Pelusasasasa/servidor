@@ -3,6 +3,9 @@ const ventasCTRL = {}
 const Ventas = require('../models/venta');
 
 ventasCTRL.cargarVenta = async(req,res)=>{
+    const id = (await Ventas.find().sort({natural:-1}).limit(1))[0]._id;
+    console.log(id)
+    req.body._id = id + 1;
     const venta = new Ventas(req.body);
     venta.save()
     console.log(`Venta ${req.body.nro_comp} guardada`)
@@ -44,12 +47,6 @@ ventasCTRL.entreFechasConCliente = async(req,res) => {
     res.send(ventaARetornar)
 }
 
-ventasCTRL.traerTamanio = async(req,res) => {
-    const venta = (await Ventas.find().sort({$natural:-1}).limit(1))[0];
-    let ultimaVenta = venta._id;
-    res.send(`${ultimaVenta }`)
-}
-
 ventasCTRL.traerTicket = async(req,res)=>{
     const {numero,tipo,condIva} = req.params;
     const venta = (await Ventas.find({nro_comp:numero,tipo:tipo,condIva:condIva}))[0];
@@ -60,7 +57,7 @@ ventasCTRL.eliminarVenta = async(req,res)=>{
     const {id} = req.params;
     const a = await Ventas.findOneAndDelete({nro_comp:id}); 
     console.log(`Venta ${id} Eliminada`);
-    res.send("Venta Eliminada");
+    res.send(a);
 }
 
 module.exports = ventasCTRL;

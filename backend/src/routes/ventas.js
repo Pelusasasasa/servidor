@@ -2,10 +2,9 @@ const {Router} = require("express");
 const { get } = require("express/lib/response");
 const router = Router();
 
-const {cargarVenta,traerVentas,modificarVentas,entreFechas,entreFechasConId,traerTamanio,eliminarVenta,traerTicket,entreFechasConCliente,traerVentaUnica} = require("../controllers/ventas.controllers")
+const {cargarVenta,traerVentas,modificarVentas,entreFechas,entreFechasConId,eliminarVenta,traerTicket,entreFechasConCliente,traerVentaUnica} = require("../controllers/ventas.controllers")
 
 router.route('/')
-    .get(traerTamanio)
     .post(cargarVenta)
 
 router.route('/:id')
