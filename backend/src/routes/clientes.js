@@ -1,11 +1,11 @@
 const {Router} = require("express")
 const router = Router()
 
-const {traerClientes,crearCliente,tamanioArreglo,traerCliente,modificarCliente,eliminarCliente,traerClientePorCuit,traerClientesConSaldo} = require('../controllers/clientes.controllers')
+const {traerClientes,crearCliente,traerClientesConSaldo,tamanioArreglo,traerCliente,modificarCliente,eliminarCliente,traerClientePorCuit,traerClientesConSaldos} = require('../controllers/clientes.controllers')
 
 
 router.route('/')
-    .get(traerClientesConSaldo)
+    .get(traerClientesConSaldos)
     .post(crearCliente)
     
 router.route('/:identificador')
@@ -22,5 +22,8 @@ router.route('/cuit/:cuit')
     //se usa para saber el tamaño del codigo de cliente
 router.route('/crearCliente/:inicial')
     .get(tamanioArreglo)
+
+router.route('/clienteConSaldo/:id')
+    .get(traerClientesConSaldo)
 
     module.exports = router;

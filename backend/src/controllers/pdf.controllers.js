@@ -115,7 +115,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
     html = (venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? html.replace('{{iva105}}',`<p class="IVA iva105">IVA 10.5%: $<span>${venta.iva105.toFixed(2)}</span></p>`) : html.replace('{{iva105}}',"");
     html = venta.condIva !== "Inscripto" ? html.replace('{{subtotal}}',`<p class="SinIVA">Subtotal: $<span>${venta.precioFinal + parseFloat(venta.descuento)}</span></p>`) : html.replace('{{subtotal}}',"");
     html = html.replace('{{descuento}}',parseFloat(venta.descuento).toFixed(2));
-    html = html.replace('{{precioFinal}}',venta.precioFinal);
+    html = html.replace('{{precioFinal}}',venta.precioFinal.toFixed(2));
 
 
     const config = {
