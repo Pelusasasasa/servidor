@@ -1,7 +1,7 @@
 const {Router} = require("express");
 const router = Router();
 
-const {cargarPresupuesto,traerPresupuesto,traerTamanio,modificarPresupuesto,entreFechas,entreFechasConId,eliminarPresupuesto,entreFechasConCliente} = require('../controllers/presupuesto.controllers')
+const {cargarPresupuesto,traerPresupuesto,traerTamanio,modificarPresupuesto,entreFechas,entreFechasConId,entreFechasConCliente} = require('../controllers/presupuesto.controllers')
 
 router.route('/')
     .get(traerTamanio)
@@ -10,8 +10,6 @@ router.route('/')
 router.route('/:id')
     .get(traerPresupuesto)
     .put(modificarPresupuesto)
-    .delete(eliminarPresupuesto)
-
 
 router.route('/:desde/:hasta')
     .get(entreFechas)

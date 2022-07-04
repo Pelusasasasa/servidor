@@ -1,7 +1,7 @@
 const {Router} = require("express")
 const router = Router()
 
-const {traerClientes,crearCliente,traerClientesConSaldo,tamanioArreglo,traerCliente,modificarCliente,eliminarCliente,traerClientePorCuit,traerClientesConSaldos} = require('../controllers/clientes.controllers')
+const {traerClientes,crearCliente,traerClienteConSaldo,tamanioArreglo,traerCliente,modificarCliente,eliminarCliente,traerClientePorCuit,traerClientesConSaldos} = require('../controllers/clientes.controllers')
 
 
 router.route('/')
@@ -24,6 +24,6 @@ router.route('/crearCliente/:inicial')
     .get(tamanioArreglo)
 
 router.route('/clienteConSaldo/:id')
-    .get(traerClientesConSaldo)
+    .get(traerClienteConSaldo)
 
     module.exports = router;

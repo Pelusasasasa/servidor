@@ -67,7 +67,7 @@ clienteCTRL.traerClientesConSaldos = async(req,res)=>{
     res.send(clientes)
 }
 
-clienteCTRL.traerClientesConSaldo = async(req,res)=>{
+clienteCTRL.traerClienteConSaldo = async(req,res)=>{
     const {id} = req.params;
     const cliente = await Clientes.find({
         $and:[
