@@ -3,7 +3,7 @@ const ventasCTRL = {}
 const Ventas = require('../models/venta');
 
 ventasCTRL.cargarVenta = async(req,res)=>{
-    const id = (await Ventas.find().sort({natural:-1}).limit(1))[0]._id;
+    const id = (await Ventas.find().sort({$natural:-1}).limit(1))[0]._id;
     console.log(id)
     req.body._id = id + 1;
     const venta = new Ventas(req.body);

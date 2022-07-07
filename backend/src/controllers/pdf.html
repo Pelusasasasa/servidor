@@ -133,7 +133,7 @@
     </header>
     <main class="cliente">
         <section>
-            <p>Apellido y Nombre / Razon Social:<span>{{venta.nombreCliente}}</span></p>
+            <p>Apellido y Nombre / Razon Social:<span>{{cliente}}</span></p>
             <p>{{dniocuit}}:<span>{{dnicuit}}}</span></p>
         </section>
         <section>
@@ -149,7 +149,7 @@
             <thead>
                 <tr>
                     {{codigo}}
-                    {{productoServicion}}
+                    {{productoServicio}}
                     {{cantidad}} 
                     {{medida}}
                     {{precioU}}
@@ -159,7 +159,7 @@
                 </tr>
             </thead>
             <tbody>
-                ${trs}
+                {{trs}}
             </tbody>
         </table>
     </main> 
