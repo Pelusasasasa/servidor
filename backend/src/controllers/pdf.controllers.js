@@ -103,6 +103,8 @@ pdfCTRL.crearPdf = async(req,res)=>{
     html = venta.tipo_comp === "Recibos" ? html.replace('{{subtotal}}',"") : html.replace('{{subtotal}}',"<td>Subtotal</td>");
     html = (venta.condIva === "Inscripto" && venta.tipo_comp === "Ticket Factura") ? html.replace('{{alicuota}}',`<td>Alicuota IVA</td>`) : html.replace('{{alicuota}}',"");
     html = (venta.condIva === "Inscripto"  && venta.tipo_comp === "Ticket Factura") ? html.replace('{{subtotalIva}}',`<td>Subtotal c/IVA</td>`) : html.replace('{{subtotalIva}}',"");
+    
+    html = html.replace('{{trs}}',trs)
 
     //afip
     html = html.replace('{{image}}', img);
@@ -127,6 +129,7 @@ pdfCTRL.crearPdf = async(req,res)=>{
             }else{
                 console.log(res)
             }
+            html = fs.readFileSync(__dirname + '/pdf.html','utf8');
         })
         res.send("a");
 }
