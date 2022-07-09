@@ -20,7 +20,7 @@ movProductosCTRL.modificarVarios = async(req,res)=>{
 
 movProductosCTRL.cargarMovimientoProducto = async(req,res)=>{
     let ultimoMovimiento = await movProducto.find().sort({$natural:-1}).limit(1)
-    let id = ultimoMovimiento[0]._id;
+    let id =  ultimoMovimiento[0] ? ultimoMovimiento[0]._id : 0;
     const arreglo = req.body;
     console.log("El id inicial es : " + id)
     for await(let movimiento of arreglo){

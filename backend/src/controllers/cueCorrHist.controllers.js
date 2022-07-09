@@ -2,15 +2,10 @@ const cuentaHistoricaCTRL = {};
 
 const CuentaHisto = require('../models/CueCorrHist')
 
-cuentaHistoricaCTRL.tamanioHistorica = async(req,res)=>{
-   const historica = (await CuentaHisto.find().sort({$natural:-1}).limit(1))[0];
-    let ultimaVenta = historica._id;
-    res.send(`${ultimaVenta}`);
-}
-
-
 cuentaHistoricaCTRL.cargarHistorica = async(req,res)=>{
     const historica = new CuentaHisto(req.body);
+    let id = (await CuentaHisto.find().sort({$natural:-1}).limit(1))[0];
+    historica._id = id ? id._id + 1 : 1;
     historica.save();
     console.log(`Historica ${req.body.nro_comp} Guardada`);
     res.send(`Historica ${req.body.nro_comp} Guardada`);

@@ -2,12 +2,6 @@ const cuentaCompCTRL = {};
 
 const CuentaComp = require('../models/CueCorrComp');
 
-cuentaCompCTRL.tamanioCompensadas = async(req,res)=>{
-    const compensada = (await CuentaComp.find().sort({$natural:-1}).limit(1))[0];
-    let ultimaVenta = compensada._id;
-    res.send(`${ultimaVenta}`); 
-}
-
 cuentaCompCTRL.traerCompensada = async(req,res)=>{
     const {id} = req.params;
     let compensada = await CuentaComp.find({$and:[{nro_comp:id},{saldo:{$ne:0}}]});
@@ -25,6 +19,8 @@ cuentaCompCTRL.traerCompensadasPorCliente = async(req,res)=>{
 
 cuentaCompCTRL.cargarCompensada = async(req,res)=>{
     const nuevaCompensada = new CuentaComp(req.body);
+    let id = (await CuentaComp.find().sort({$natural:-1}).limit(1))[0]
+    nuevaCompensada._id = id ? id._id + 1 : 1; 
     nuevaCompensada.save();
     console.log(`Compensada ${req.body.nro_comp} cargada`)
     res.send("Nueva compensada cargada");

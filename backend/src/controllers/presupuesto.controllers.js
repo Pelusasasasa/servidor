@@ -5,6 +5,8 @@ const Presupuesto = require("../models/presupuesto");
 
 PresupuestoCTRL.cargarPresupuesto = async(req,res)=>{
     const presupuesto = new Presupuesto(req.body);
+    let id = (await Presupuesto.find().sort({$natural:-1}).limit(1))[0];
+    presupuesto._id = id ? id._id + 1 : 1;
     presupuesto.save()
     console.log(`Presupuesto ${req.body.nro_comp} guardado`)
     res.send(presupuesto)
@@ -14,12 +16,6 @@ PresupuestoCTRL.traerPresupuesto = async(req,res)=>{
     const {id:nro_comp} = req.params;
     const presupuesto = await Presupuesto.find({nro_comp:nro_comp});
     res.send(presupuesto[0])
-}
-
-PresupuestoCTRL.traerTamanio = async(req,res)=>{
-    const presupuesto = (await Presupuesto.find().sort({$natural:-1}).limit(1))[0];
-    let ultimaVenta = presupuesto._id;
-    res.send(`${ultimaVenta}`)
 }
 
 PresupuestoCTRL.modificarPresupuesto = async(req,res) =>{
