@@ -28,6 +28,11 @@ app.use('/api/cuentaComp',require('./routes/cueCorrComp'));
 app.use('/api/cuentaHisto',require('./routes/cueCorrHist'));
 //Imprimir un pdf
 app.use('/api/crearPdf',require('./routes/pdf'));
-
+//cheques
+app.use('/api/cheques',require('./routes/cheques'));
+//tarjetas
+app.use('/api/tarjetas',require('./routes/tarjetas'));
+//tipo Tarjetas
+app.use('/api/tipoTarjetas',require('./routes/tipoTarjetas'));
 
 module.exports = app
