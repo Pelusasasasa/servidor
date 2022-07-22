@@ -34,5 +34,10 @@ app.use('/api/cheques',require('./routes/cheques'));
 app.use('/api/tarjetas',require('./routes/tarjetas'));
 //tipo Tarjetas
 app.use('/api/tipoTarjetas',require('./routes/tipoTarjetas'));
-
+//vales
+app.use('/api/vales',require('./routes/vale'));
+//cuentas
+app.use('/api/cuentas',require('./routes/cuenta'));
+//movCaja
+app.use('/api/movCajas',require('./routes/movCaja'));
 module.exports = app
